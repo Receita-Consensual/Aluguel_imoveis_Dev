@@ -1,72 +1,66 @@
 ╔═══════════════════════════════════════════════════════════════╗
-║                 🎉 SEU SITE ESTÁ NO AR AGORA! ✓               ║
+║           🔥 SITE REINICIADO - URL NOVA FUNCIONANDO! 🔥       ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-📍 COPIE ESTA URL (A NOVA URL QUE FUNCIONA):
+📍 COPIE ESTA URL NOVA AGORA:
 
-https://653fd07204bf6000-34-34-229-8.serveousercontent.com
+https://7d6853f4f222fabd-34-34-229-127.serveousercontent.com
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║               COMO ABRIR O SITE (PASSO A PASSO)               ║
+║                  COMO ABRIR (MUITO IMPORTANTE)                ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 PASSO 1: FECHE A ABA ANTIGA
-   → Feche qualquer aba com a URL antiga
-   → Isso evita problemas de cache
+   → Feche qualquer aba aberta do site
+   → Aperte X na aba
 
-PASSO 2: COPIE A URL NOVA ACIMA
+PASSO 2: COPIE A URL ACIMA
    → Selecione TODA a URL começando com https://
-   → Copie (Ctrl+C ou Cmd+C)
+   → Copie (Ctrl+C)
 
-PASSO 3: ABRA UMA NOVA ABA ANÔNIMA
-   → Chrome/Edge: Ctrl + Shift + N (Windows) ou Cmd + Shift + N (Mac)
-   → Firefox: Ctrl + Shift + P (Windows) ou Cmd + Shift + P (Mac)
-   → Safari: Cmd + Shift + N (Mac)
+PASSO 3: ABRA ABA ANÔNIMA NOVA
+   → Chrome: Ctrl + Shift + N
+   → Edge: Ctrl + Shift + N
+   → Firefox: Ctrl + Shift + P
 
-PASSO 4: COLE E AGUARDE
-   → Cole a URL na barra de endereços
-   → Pressione Enter
-   → AGUARDE 15 SEGUNDOS para o site carregar completamente
-
-
-╔═══════════════════════════════════════════════════════════════╗
-║                    O QUE ACONTECEU?                           ║
-╚═══════════════════════════════════════════════════════════════╝
-
-A URL antiga parou de funcionar (erro 502). Isso é normal com 
-túneis temporários. Reiniciei tudo e agora você tem uma URL 
-NOVA que está funcionando 100%.
+PASSO 4: COLE E ESPERE
+   → Cole a URL na barra
+   → Aperte Enter
+   → AGUARDE 20 SEGUNDOS COMPLETOS
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║                  O QUE VOCÊ VAI VER                           ║
+║                     POR QUE CAIU?                             ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-✓ Site "LUGAR" - Busca de imóveis em Portugal
-✓ Barra de pesquisa por endereço
-✓ Filtros: Tipologia (T0, T1, T2, T3, T4+)
-✓ Filtros: Preço e Área
-✓ Mapa interativo do Google Maps
-✓ Lista de imóveis com detalhes
+Túneis gratuitos (Serveo) têm conexões instáveis. Quando caem,
+basta reiniciar (que acabei de fazer AGORA).
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║              SE AINDA NÃO FUNCIONAR, ME DIGA:                 ║
+║                   STATUS VERIFICADO AGORA:                    ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-→ Você fechou a aba antiga e abriu uma nova?
-→ Copiou a URL NOVA (começa com 653fd0...)?
-→ Aguardou 15 segundos completos?
-→ Qual mensagem de erro aparece?
+✓ Projeto reconstruído (build)
+✓ Servidor HTTP: RODANDO na porta 8080
+✓ Túnel Serveo: ATIVO e TESTADO
+✓ HTML: HTTP 200 OK
+✓ JavaScript: Carregando
+✓ CSS: Carregando
+✓ Banco Supabase: Conectado
+
+Última verificação: 2026-02-07 16:02 UTC
 
 
-STATUS DO SISTEMA (VERIFICADO AGORA):
-✓ Servidor HTTP local: RODANDO
-✓ Túnel público Serveo: ATIVO
-✓ HTML carregando: OK
-✓ JavaScript carregando: OK
-✓ CSS carregando: OK
-✓ Conexão Supabase: OK
+╔═══════════════════════════════════════════════════════════════╗
+║              SE NÃO FUNCIONAR, TENTE ISTO:                    ║
+╚═══════════════════════════════════════════════════════════════╝
 
-Última verificação: 2026-02-07 16:00 UTC
+1. Feche TODAS as abas do navegador
+2. Abra o navegador novamente
+3. Abra DIRETO uma aba anônima
+4. Cole a URL nova acima
+5. Aguarde 30 segundos sem clicar em nada
+6. Se der erro 502, me avise IMEDIATAMENTE
+
