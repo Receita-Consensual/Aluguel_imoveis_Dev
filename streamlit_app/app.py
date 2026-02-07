@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 
 # ==========================================
-# 1. CONFIGURAÇÕES DE NÍVEL EMPRESARIAL
+# 1. CONFIGURAÇÕES
 # ==========================================
 st.set_page_config(
     page_title="Lugar | Inteligência Imobiliária",
@@ -18,316 +18,162 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. GESTÃO DE ESTADO (LOGIN, SUBSCRITORES, FAVORITOS)
+# 2. GESTÃO DE ESTADO
 # ==========================================
 if 'auth_state' not in st.session_state:
-    st.session_state.auth_state = {
-        'is_logged': False,
-        'user_name': None,
-        'plan': 'Visitante',  # Visitante, PRO, Enterprise
-        'favorites': []
-    }
-
-if 'search_history' not in st.session_state:
-    st.session_state.search_history = []
+    st.session_state.auth_state = {'is_logged': False, 'user_name': None, 'plan': 'Visitante'}
 
 # ==========================================
-# 3. ENGINE DE ESTILO (CSS CUSTOMIZADO - +150 LINHAS)
+# 3. ENGINE DE ESTILO VIBRANTE (CSS COM VIDA)
 # ==========================================
 st.markdown("""
     <style>
-    /* Importação de fonte moderna */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
 
-    /* Reset Geral para Branco e Azul Profissional */
     .stApp {
         background-color: #FFFFFF;
         font-family: 'Inter', sans-serif;
-        color: #1E293B;
+        color: #0F172A;
     }
     header {visibility: hidden;}
-    
-    /* Sidebar Estilizada */
-    [data-testid="stSidebar"] {
-        background-color: #F8FAFC !important;
-        border-right: 1px solid #E2E8F0;
-    }
+    [data-testid="stSidebar"] { background-color: #F8FAFC !important; border-right: 1px solid #E2E8F0; }
 
-    /* Hero Section (A "Vida" do site) */
+    /* Hero Section Elétrica */
     .hero-section {
-        background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
-        padding: 80px 20px;
+        background: linear-gradient(120deg, #2563EB, #1D4ED8, #3B82F6); /* Azul mais vivo e dinâmico */
+        padding: 85px 20px;
         text-align: center;
-        border-radius: 0 0 50px 50px;
+        border-radius: 0 0 60px 60px;
         margin-top: -100px;
-        margin-bottom: 60px;
-        box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2);
+        margin-bottom: 70px;
+        box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.4); /* Sombra azulada vibrante */
     }
     .hero-section h1 {
-        color: white !important;
-        font-size: 4.5rem !important;
-        font-weight: 800 !important;
-        letter-spacing: -3px;
-        margin-bottom: 10px;
+        color: white !important; font-size: 5rem !important; font-weight: 900 !important;
+        letter-spacing: -3px; margin-bottom: 15px;
+        text-shadow: 2px 4px 8px rgba(0,0,0,0.2); /* Texto salta da tela */
     }
-    .hero-section p {
-        color: #DBEAFE;
-        font-size: 1.4rem;
-        font-weight: 300;
-    }
+    .hero-section p { color: #EFF6FF; font-size: 1.5rem; font-weight: 500; }
 
-    /* Barra de Busca Flutuante Style Idealista */
+    /* Barra de Busca Flutuante com Luz */
     .search-dock {
-        background: white;
-        padding: 35px;
-        border-radius: 30px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-        max-width: 1100px;
-        margin: -80px auto 50px auto;
-        border: 1px solid #F1F5F9;
-        display: flex;
-        gap: 15px;
+        background: white; padding: 40px; border-radius: 35px;
+        box-shadow: 0 35px 70px -15px rgba(37, 99, 235, 0.25); /* Sombra com cor */
+        max-width: 1100px; margin: -90px auto 60px auto; border: 1px solid #EFF6FF;
         z-index: 1000;
     }
 
-    /* Cards de Imóvel Premium */
+    /* Cards de Imóvel Cheios de Vida */
     .prop-card {
-        background-color: #FFFFFF;
-        border-radius: 24px;
-        padding: 0px;
-        border: 1px solid #F1F5F9;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        margin-bottom: 30px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        background-color: #FFFFFF; border-radius: 28px; padding: 0px;
+        border: 2px solid #F1F5F9; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin-bottom: 35px; overflow: hidden;
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
     }
     .prop-card:hover {
-        transform: translateY(-12px);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-        border-color: #3B82F6;
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 30px 60px -12px rgba(37, 99, 235, 0.3); /* Sombra azul vibrante no hover */
+        border-color: #60A5FA;
     }
-    .prop-content { padding: 25px; }
-    .price-tag { color: #2563EB; font-size: 30px; font-weight: 800; }
-    .location { color: #64748B; font-size: 14px; margin-bottom: 15px; }
+    /* Placeholder de imagem com degradê em vez de cinza chato */
+    .prop-img-placeholder {
+        height: 200px;
+        background: linear-gradient(to top right, #DBEAFE, #F0F9FF);
+        display: flex; align-items: center; justify-content: center; color: #3B82F6; font-weight: 600;
+    }
     
-    /* Badges de Status */
-    .badge-new { background: #DCFCE7; color: #166534; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 700; }
-    .badge-ai { background: #EEF2FF; color: #4338CA; padding: 6px 14px; border-radius: 12px; font-size: 11px; font-weight: 700; border: 1px solid #C7D2FE; }
+    /* Badges Vibrantes (Cores sólidas que estouram) */
+    .badge-new { background: #22C55E; color: white; padding: 8px 16px; border-radius: 14px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
+    .badge-ai { background: #6366F1; color: white; padding: 8px 16px; border-radius: 14px; font-size: 12px; font-weight: 800; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3); }
 
-    /* Estilização do Mapa */
-    [data-testid="stMapContainer"], .folium-map {
-        border-radius: 35px !important;
-        border: 10px solid white !important;
-        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2) !important;
-    }
+    .price-tag { color: #2563EB; font-size: 34px; font-weight: 900; letter-spacing: -1px; }
 
-    /* Botão Primário */
+    /* Botões com Gradiente */
     .stButton > button {
-        background: #2563EB;
-        color: white;
-        border-radius: 15px;
-        padding: 15px 30px;
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s;
-        width: 100%;
+        background: linear-gradient(to right, #2563EB, #1D4ED8);
+        color: white; border-radius: 18px; padding: 18px 36px; font-weight: 700; border: none;
+        box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4); transition: all 0.3s;
     }
-    .stButton > button:hover {
-        background: #1E40AF;
-        transform: scale(1.02);
-    }
+    .stButton > button:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6); }
     </style>
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 4. TRATAMENTO ROBUSTO DE LOGO (FIX ERROR)
+# 4. LÓGICA E SIDEBAR
 # ==========================================
 def get_logo():
-    # Nicolas, aqui buscamos a imagem em múltiplos lugares possíveis
-    paths = [
-        "Gemini_Generated_Image_su6quisu6quisu6q.jpg",
-        "streamlit_app/Gemini_Generated_Image_su6quisu6quisu6q.jpg",
-        "../Gemini_Generated_Image_su6quisu6quisu6q.jpg"
-    ]
+    paths = ["Gemini_Generated_Image_su6quisu6quisu6q.jpg", "streamlit_app/Gemini_Generated_Image_su6quisu6quisu6q.jpg"]
     for p in paths:
         if os.path.exists(p): return p
     return None
-
 logo_oficial = get_logo()
 
-# ==========================================
-# 5. BARRA LATERAL (GESTÃO DE CONTA E MÉTRICAS)
-# ==========================================
 with st.sidebar:
-    if logo_oficial:
-        st.image(logo_oficial, width=180)
-    else:
-        st.markdown("<h1 style='color: #2563EB;'>LUGAR</h1>", unsafe_allow_html=True)
-    
+    if logo_oficial: st.image(logo_oficial, width=200)
+    else: st.markdown("<h1 style='color: #2563EB; font-size: 40px;'>LUGAR</h1>", unsafe_allow_html=True)
     st.markdown("---")
-    
     if not st.session_state.auth_state['is_logged']:
-        st.subheader("🔑 Acesso Restrito")
-        with st.form("login_form"):
-            email = st.text_input("E-mail")
-            senha = st.text_input("Senha", type="password")
-            entrar = st.form_submit_button("Entrar no Painel PRO")
-            if entrar:
-                if email and senha:
-                    st.session_state.auth_state['is_logged'] = True
-                    st.session_state.auth_state['user_name'] = email.split('@')[0]
-                    st.session_state.auth_state['plan'] = 'PRO'
-                    st.success("Acesso liberado!")
-                    time.sleep(1)
-                    st.rerun()
+        st.subheader("🚀 Acesso PRO")
+        with st.form("login"):
+            st.text_input("Email"); st.text_input("Senha", type="password")
+            if st.form_submit_button("Desbloquear Painel"):
+                st.session_state.auth_state.update({'is_logged': True, 'user_name': 'Admin', 'plan': 'Enterprise'})
+                st.rerun()
     else:
-        st.success(f"Olá, {st.session_state.auth_state['user_name']}!")
-        st.info(f"Plano Ativo: {st.session_state.auth_state['plan']}")
-        if st.button("Sair da Conta"):
-            st.session_state.auth_state['is_logged'] = False
-            st.rerun()
-
+        st.success(f"Logado: {st.session_state.auth_state['user_name']} ({st.session_state.auth_state['plan']})")
+        if st.button("Sair"): st.session_state.auth_state['is_logged'] = False; st.rerun()
     st.markdown("---")
-    st.subheader("📊 Market Analytics (Aveiro)")
-    st.metric("Demanda de Arrendamento", "Alta", "+14%")
-    st.metric("Yield Médio", "5.8%", "-0.2%")
-    
-    st.markdown("---")
-    st.caption("© 2026 Lugar • By Receita Consensual")
+    st.markdown("### 🎯 Radar Aveiro")
+    st.metric("Novos Hoje", "32", "+5")
 
 # ==========================================
-# 6. HEADER PRINCIPAL (HERO)
+# 5. CORPO DA PÁGINA (HERO + BUSCA)
 # ==========================================
 st.markdown("""
     <div class="hero-section">
         <h1>Lugar</h1>
-        <p>A nova era da busca imobiliária inteligente em Portugal.</p>
+        <p>Inteligência imobiliária. Mais cor, mais vida, mais resultados.</p>
     </div>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 7. BARRA DE BUSCA "IDEALISTA STYLE"
-# ==========================================
 with st.container():
     st.markdown('<div class="search-dock">', unsafe_allow_html=True)
-    c1, c2, c3, c4 = st.columns([3, 1, 1, 1])
-    with c1:
-        # Placeholder para Autocomplete
-        local_input = st.text_input("Localização", placeholder="Cidade, freguesia ou rua...", label_visibility="collapsed")
-    with c2:
-        tipo_negocio = st.selectbox("Operação", ["Arrendar", "Comprar"], label_visibility="collapsed")
-    with c3:
-        tipologia = st.selectbox("Tipologia", ["T0/T1", "T2", "T3", "T4+"], label_visibility="collapsed")
-    with c4:
-        buscar = st.button("🔍 PROCURAR")
+    c1, c2, c3, c4 = st.columns([3, 1.2, 1.2, 1])
+    with c1: st.text_input("Localização", placeholder="Onde queres viver?", label_visibility="collapsed")
+    with c2: st.selectbox("Operação", ["Arrendar", "Comprar"], label_visibility="collapsed")
+    with c3: st.selectbox("Tipologia", ["T1", "T2", "T3+"], label_visibility="collapsed")
+    with c4: st.button("🔍 BUSCAR AGORA")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# 8. LAYOUT CENTRAL (MAPA + LISTAGEM + FILTROS)
+# 6. MAPA E CARDS VIBRANTES
 # ==========================================
-col_map, col_details = st.columns([2.5, 1])
+col_map, col_details = st.columns([2, 1.2])
 
 with col_map:
-    st.subheader("📍 Exploração por Mapa")
-    
-    # Mapa focado em Aveiro com estilo CLARO
-    m = folium.Map(
-        location=[40.6405, -8.6538], 
-        zoom_start=14, 
-        tiles='CartoDB positron',
-        zoom_control=False
-    )
-    
-    # Simulação de Dados Inteligentes (Supabase Mock)
-    map_data = pd.DataFrame({
-        'lat': [40.6445, 40.6380, 40.6410, 40.6480],
-        'lon': [-8.6588, -8.6520, -8.6480, -8.6620],
-        'preco': [850, 1100, 750, 2200],
-        'tipo': ['Apartamento', 'Moradia', 'Apartamento', 'Penthouse']
-    })
-
-    for _, row in map_data.iterrows():
-        color = '#2563EB' if row['preco'] < 1500 else '#1E3A8A'
-        folium.CircleMarker(
-            location=[row['lat'], row['lon']],
-            radius=12,
-            popup=f"€{row['preco']}",
-            color=color,
-            fill=True,
-            fill_opacity=0.8
-        ).add_to(m)
-    
-    # Renderização do Mapa
-    st_folium(m, width="100%", height=700, returned_objects=[])
+    m = folium.Map(location=[40.6405, -8.6538], zoom_start=14, tiles='CartoDB positron', zoom_control=False)
+    folium.CircleMarker([40.6445, -8.6588], radius=15, color='#2563EB', fill=True, fill_opacity=0.9, popup="€850").add_to(m)
+    folium.CircleMarker([40.6380, -8.6520], radius=15, color='#6366F1', fill=True, fill_opacity=0.9, popup="€1200").add_to(m)
+    st_folium(m, width="100%", height=750, returned_objects=[])
 
 with col_details:
-    st.subheader("✨ Melhores Oportunidades")
-    
-    # Filtro Rápido
-    filtro = st.radio("Ordenar por:", ["Melhor Preço", "Recentemente Adicionado"], horizontal=True)
-    
-    for i in range(3):
-        # Lógica de Cartão com "Vida"
-        is_ai_verified = True if i % 2 == 0 else False
-        
+    st.subheader("🔥 Oportunidades Quentes")
+    for i in range(2):
         st.markdown(f"""
             <div class="prop-card">
-                <div style="height: 180px; background: #E2E8F0; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: #94A3B8;">Foto do Imóvel {i+1}</span>
-                </div>
-                <div class="prop-content">
-                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                        <span class="badge-new">NOVO</span>
-                        {"<span class='badge-ai'>IA VERIFIED</span>" if is_ai_verified else ""}
+                <div class="prop-img-placeholder">📸 Foto Vibrante do Imóvel {i+1}</div>
+                <div style="padding: 30px;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <span class="badge-new">NOVO HOJE</span>
+                        <span class="badge-ai">IA VALIDADO</span>
                     </div>
-                    <div class="price-tag">€ {850 + (i*300)}<span style="font-size: 14px; font-weight: normal;">/mês</span></div>
-                    <h4 style="margin: 0; font-size: 18px;">Apartamento T2 em Aveiro</h4>
-                    <p class="location">📍 Vera Cruz, Distrito de Aveiro</p>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: #475569; background: #F8FAFC; padding: 10px; border-radius: 12px;">
-                        <span>📏 95m²</span>
-                        <span>🏢 2º Andar</span>
-                        <span>🛏️ T2</span>
-                    </div>
+                    <div class="price-tag">€ {850 + (i*350)}<span style="font-size: 16px; font-weight: 600;">/mês</span></div>
+                    <h3 style="margin: 10px 0; font-size: 22px;">T{i+2} de Luxo em Aveiro</h3>
+                    <p style="color: #64748B; font-weight: 500;">📍 Glória, Aveiro Centro</p>
                 </div>
             </div>
         """, unsafe_allow_html=True)
-        
-        # Interação para subscritores
         if not st.session_state.auth_state['is_logged']:
-            st.button("Ver Contato", key=f"btn_contact_{i}", help="Apenas assinantes PRO")
+            st.button(f"🔒 Desbloquear Contato {i+1}", disabled=True)
         else:
-            st.button("Contactar Proprietário", key=f"btn_contact_pro_{i}")
-
-# ==========================================
-# 9. FERRAMENTAS EXCLUSIVAS (LINHAS EXTRAS PARA ROBUSTEZ)
-# ==========================================
-st.markdown("---")
-c_tool1, c_tool2 = st.columns(2)
-
-with c_tool1:
-    st.subheader("🤖 IA Valuation Tool (Beta)")
-    st.write("Calcule o preço justo de qualquer imóvel em segundos.")
-    with st.expander("Abrir Calculadora de Preço"):
-        sqm = st.number_input("Metros Quadrados", 10, 500, 80)
-        zona = st.selectbox("Zona", ["Aveiro Centro", "Ílhavo", "Esgueira", "Glória"])
-        if st.button("Estimar Preço"):
-            est = sqm * 12.5 if zona == "Aveiro Centro" else sqm * 9.8
-            st.success(f"O valor de mercado estimado é: € {est:,.2f}")
-
-with c_tool2:
-    st.subheader("📬 Alerta de Oportunidades")
-    st.write("Não perca a próxima casa em Aveiro. O robô te avisa.")
-    st.text_input("Seu melhor e-mail", placeholder="nicolas@exemplo.pt")
-    st.button("Ativar Alerta Radar")
-
-# ==========================================
-# 10. RODAPÉ INSTITUCIONAL (LINHAS FINAIS)
-# ==========================================
-st.markdown("---")
-st.markdown(f"""
-    <div style="text-align: center; padding: 40px; color: #94A3B8;">
-        <p><b>Lugar</b> é um produto de engenharia de dados desenvolvido por <b>Receita Consensual</b>.</p>
-        <p>Aveiro, Portugal • {datetime.now().year} | Versão 3.0.4-Enterprise</p>
-        <p style="font-size: 10px;">A plataforma Lugar utiliza algoritmos avançados de scraping e inteligência artificial para monitorar o mercado imobiliário em tempo real.</p>
-    </div>
-""", unsafe_allow_html=True)
+            st.button(f"📞 Ligar Agora {i+1}")
