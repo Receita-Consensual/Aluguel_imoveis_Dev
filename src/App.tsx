@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import GoogleMapsProvider from './components/GoogleMapsProvider';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import Filters from './components/Filters';
@@ -7,7 +8,6 @@ import PropertyList from './components/PropertyList';
 import FounderSection from './components/FounderSection';
 import MobileDrawer from './components/MobileDrawer';
 import { useImoveis } from './hooks/useImoveis';
-import { useGeocode } from './hooks/useGeocode';
 import type { SearchFilters } from './types/imovel';
 
 const DEFAULT_FILTERS: SearchFilters = {
@@ -29,7 +29,7 @@ const RADIUS_LABELS: Record<number, string> = {
 };
 
 function App() {
-  const [searchCenter, setSearchCenter] = useState<[number, number] | null>(null);
+  const [searchCenter, setSearchCenter] = useState<{ lat: number; lng: number } | null>(null);
   const [raioMetros, setRaioMetros] = useState(2000);
   const [filters, setFilters] = useState<SearchFilters>(DEFAULT_FILTERS);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
@@ -39,32 +39,25 @@ function App() {
   const [isSearching, setIsSearching] = useState(false);
 
   const { imoveis, loading, polling, searchByRadius, pollForResults, filterImoveis } = useImoveis();
-  const { geocode, geocoding } = useGeocode();
 
   const filteredImoveis = useMemo(
     () => filterImoveis(imoveis, filters),
     [imoveis, filters, filterImoveis]
   );
 
-  const handleSearch = useCallback(async (query: string, raio: number) => {
+  const handleSearch = useCallback(async (lat: number, lng: number, raio: number, placeName: string) => {
     setIsSearching(true);
     setRaioMetros(raio);
     setHasSearched(true);
+    setSearchCenter({ lat, lng });
 
-    const result = await geocode(query);
-    if (!result) {
-      setIsSearching(false);
-      return;
-    }
-
-    setSearchCenter([result.lat, result.lon]);
-    const results = await searchByRadius(result.lat, result.lon, raio);
+    const results = await searchByRadius(lat, lng, raio);
     setIsSearching(false);
 
     if (results.length < 3) {
-      pollForResults(result.lat, result.lon, raio, query);
+      pollForResults(lat, lng, raio, placeName);
     }
-  }, [geocode, searchByRadius, pollForResults]);
+  }, [searchByRadius, pollForResults]);
 
   const handleLocateMe = useCallback(() => {
     if (!navigator.geolocation) return;
@@ -72,7 +65,7 @@ function App() {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
-        setSearchCenter([latitude, longitude]);
+        setSearchCenter({ lat: latitude, lng: longitude });
         setRaioMetros(2000);
         setHasSearched(true);
         setIsSearching(true);
@@ -96,65 +89,26 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
-      <Header onFounderClick={() => setShowFounder(true)} />
+    <GoogleMapsProvider>
+      <div className="h-screen flex flex-col bg-slate-50">
+        <Header onFounderClick={() => setShowFounder(true)} />
 
-      <div className="flex-1 pt-14 flex flex-col lg:flex-row overflow-hidden">
-        <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200 bg-white overflow-hidden">
-          <div className="p-3 space-y-3 overflow-y-auto flex-1">
-            <SearchBar
-              onSearch={handleSearch}
-              onLocateMe={handleLocateMe}
-              isSearching={isSearching || geocoding}
-            />
-            {hasSearched && (
-              <Filters
-                filters={filters}
-                onChange={setFilters}
-                resultCount={filteredImoveis.length}
-                raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
+        <div className="flex-1 pt-14 flex flex-col lg:flex-row overflow-hidden">
+          <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200 bg-white overflow-hidden">
+            <div className="p-3 space-y-3 overflow-y-auto flex-1">
+              <SearchBar
+                onSearch={handleSearch}
+                onLocateMe={handleLocateMe}
+                isSearching={isSearching}
               />
-            )}
-            <PropertyList
-              imoveis={filteredImoveis}
-              loading={loading}
-              polling={polling}
-              hasSearched={hasSearched}
-              highlightedId={highlightedId}
-              onHover={setHighlightedId}
-              scrollToId={scrollToId}
-            />
-          </div>
-        </aside>
-
-        <main className="flex-1 relative">
-          <div className="lg:hidden absolute top-3 left-3 right-3 z-[999]">
-            <SearchBar
-              onSearch={handleSearch}
-              onLocateMe={handleLocateMe}
-              isSearching={isSearching || geocoding}
-            />
-          </div>
-
-          <MapView
-            imoveis={filteredImoveis}
-            searchCenter={searchCenter}
-            raioMetros={raioMetros}
-            highlightedId={highlightedId}
-            onMarkerHover={setHighlightedId}
-            onMarkerClick={handleMarkerClick}
-          />
-
-          <MobileDrawer resultCount={filteredImoveis.length}>
-            {hasSearched && (
-              <Filters
-                filters={filters}
-                onChange={setFilters}
-                resultCount={filteredImoveis.length}
-                raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
-              />
-            )}
-            <div className="mt-3">
+              {hasSearched && (
+                <Filters
+                  filters={filters}
+                  onChange={setFilters}
+                  resultCount={filteredImoveis.length}
+                  raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
+                />
+              )}
               <PropertyList
                 imoveis={filteredImoveis}
                 loading={loading}
@@ -165,12 +119,53 @@ function App() {
                 scrollToId={scrollToId}
               />
             </div>
-          </MobileDrawer>
-        </main>
-      </div>
+          </aside>
 
-      <FounderSection visible={showFounder} onClose={() => setShowFounder(false)} />
-    </div>
+          <main className="flex-1 relative">
+            <div className="lg:hidden absolute top-3 left-3 right-3 z-[999]">
+              <SearchBar
+                onSearch={handleSearch}
+                onLocateMe={handleLocateMe}
+                isSearching={isSearching}
+              />
+            </div>
+
+            <MapView
+              imoveis={filteredImoveis}
+              searchCenter={searchCenter}
+              raioMetros={raioMetros}
+              highlightedId={highlightedId}
+              onMarkerHover={setHighlightedId}
+              onMarkerClick={handleMarkerClick}
+            />
+
+            <MobileDrawer resultCount={filteredImoveis.length}>
+              {hasSearched && (
+                <Filters
+                  filters={filters}
+                  onChange={setFilters}
+                  resultCount={filteredImoveis.length}
+                  raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
+                />
+              )}
+              <div className="mt-3">
+                <PropertyList
+                  imoveis={filteredImoveis}
+                  loading={loading}
+                  polling={polling}
+                  hasSearched={hasSearched}
+                  highlightedId={highlightedId}
+                  onHover={setHighlightedId}
+                  scrollToId={scrollToId}
+                />
+              </div>
+            </MobileDrawer>
+          </main>
+        </div>
+
+        <FounderSection visible={showFounder} onClose={() => setShowFounder(false)} />
+      </div>
+    </GoogleMapsProvider>
   );
 }
 

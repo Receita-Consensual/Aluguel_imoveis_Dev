@@ -1,40 +1,54 @@
-import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
-import L from 'leaflet';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  GoogleMap,
+  Marker,
+  Circle,
+  InfoWindow,
+} from '@react-google-maps/api';
 import type { Imovel } from '../types/imovel';
 
-const APARTMENT_ICON = new L.Icon({
-  iconUrl: 'https://cdn.jsdelivr.net/npm/@mdi/svg@7.4.47/svg/map-marker.svg',
-  iconSize: [28, 28],
-  iconAnchor: [14, 28],
-  popupAnchor: [0, -28],
-  className: 'map-marker-apartment',
-});
+const PORTUGAL_CENTER = { lat: 40.63, lng: -8.65 };
 
-const WORK_ICON = new L.DivIcon({
-  html: `<div style="width:36px;height:36px;background:#0369a1;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-  </div>`,
-  iconSize: [36, 36],
-  iconAnchor: [18, 18],
-  className: '',
-});
+const MAP_STYLES: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#f5f5f5' }] },
+  { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#616161' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#f5f5f5' }] },
+  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{ color: '#bdbdbd' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#eeeeee' }] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#757575' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#e5e5e5' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#757575' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#dadada' }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#616161' }] },
+  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
+  { featureType: 'transit.line', elementType: 'geometry', stylers: [{ color: '#e5e5e5' }] },
+  { featureType: 'transit.station', elementType: 'geometry', stylers: [{ color: '#eeeeee' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#c9d6e5' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#8ea8c4' }] },
+];
 
-function createPropertyIcon(tipologia: string, isHighlighted: boolean): L.DivIcon {
+const MAP_OPTIONS: google.maps.MapOptions = {
+  styles: MAP_STYLES,
+  disableDefaultUI: true,
+  zoomControl: true,
+  zoomControlOptions: { position: 6 },
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: false,
+  gestureHandling: 'greedy',
+  minZoom: 7,
+  maxZoom: 19,
+  clickableIcons: false,
+};
+
+function getMarkerColor(tipologia: string): string {
   const t = tipologia.toLowerCase();
-  let color = '#0284c7';
-  if (t.includes('moradia') || t.includes('casa')) color = '#059669';
-  if (t.includes('quarto')) color = '#d97706';
-
-  const size = isHighlighted ? 32 : 24;
-  const border = isHighlighted ? '3px solid #0284c7' : '2px solid white';
-
-  return new L.DivIcon({
-    html: `<div style="width:${size}px;height:${size}px;background:${color};border:${border};border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:all 0.2s"></div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-    className: '',
-  });
+  if (t.includes('moradia') || t.includes('casa')) return '#059669';
+  if (t.includes('quarto')) return '#d97706';
+  return '#0284c7';
 }
 
 function formatDistance(meters?: number): string {
@@ -43,25 +57,32 @@ function formatDistance(meters?: number): string {
   return `${(meters / 1000).toFixed(1)}km`;
 }
 
-function MapUpdater({ center, zoom }: { center: [number, number] | null; zoom: number }) {
-  const map = useMap();
-  const hasFlown = useRef(false);
-
-  useEffect(() => {
-    if (center && !hasFlown.current) {
-      map.flyTo(center, zoom, { duration: 1.5 });
-      hasFlown.current = true;
-    } else if (center) {
-      map.flyTo(center, zoom, { duration: 1 });
-    }
-  }, [center, zoom, map]);
-
-  return null;
+function getZoomForRadius(radius: number): number {
+  if (radius <= 500) return 16;
+  if (radius <= 1000) return 15;
+  if (radius <= 2000) return 14;
+  if (radius <= 3000) return 13;
+  if (radius <= 5000) return 12;
+  return 11;
 }
+
+function buildMarkerSvg(color: string, isHighlighted: boolean): string {
+  const size = isHighlighted ? 18 : 12;
+  const stroke = isHighlighted ? '#0369a1' : '#ffffff';
+  const strokeWidth = isHighlighted ? 3 : 2;
+  const full = size + strokeWidth * 2;
+  return `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${full}" height="${full}"><circle cx="${full/2}" cy="${full/2}" r="${size}" fill="${color}" stroke="${stroke}" stroke-width="${strokeWidth}"/></svg>`
+  )}`;
+}
+
+const WORK_MARKER_SVG = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="16" fill="#0369a1" stroke="#ffffff" stroke-width="3"/><rect x="13" y="16" width="14" height="10" rx="1.5" fill="none" stroke="#ffffff" stroke-width="1.5"/><path d="M17 16v-2a3 3 0 016 0v2" fill="none" stroke="#ffffff" stroke-width="1.5"/></svg>`
+)}`;
 
 interface MapViewProps {
   imoveis: Imovel[];
-  searchCenter: [number, number] | null;
+  searchCenter: { lat: number; lng: number } | null;
   raioMetros: number;
   highlightedId: string | null;
   onMarkerHover: (id: string | null) => void;
@@ -76,98 +97,126 @@ export default function MapView({
   onMarkerHover,
   onMarkerClick,
 }: MapViewProps) {
-  const defaultCenter: [number, number] = [40.63, -8.65];
-  const defaultZoom = 13;
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const [selectedImovel, setSelectedImovel] = useState<Imovel | null>(null);
 
-  const getZoomForRadius = (radius: number): number => {
-    if (radius <= 500) return 16;
-    if (radius <= 1000) return 15;
-    if (radius <= 2000) return 14;
-    if (radius <= 3000) return 13;
-    if (radius <= 5000) return 12;
-    return 11;
-  };
+  const onLoad = useCallback((map: google.maps.Map) => {
+    mapRef.current = map;
+  }, []);
+
+  useEffect(() => {
+    if (mapRef.current && searchCenter) {
+      mapRef.current.panTo(searchCenter);
+      mapRef.current.setZoom(getZoomForRadius(raioMetros));
+    }
+  }, [searchCenter, raioMetros]);
+
+  const handleMarkerClick = useCallback((imovel: Imovel) => {
+    setSelectedImovel(imovel);
+    onMarkerClick(imovel.id);
+  }, [onMarkerClick]);
 
   return (
-    <MapContainer
-      center={searchCenter || defaultCenter}
-      zoom={defaultZoom}
-      className="w-full h-full"
-      zoomControl={false}
+    <GoogleMap
+      mapContainerStyle={{ width: '100%', height: '100%' }}
+      center={searchCenter || PORTUGAL_CENTER}
+      zoom={searchCenter ? getZoomForRadius(raioMetros) : 13}
+      options={MAP_OPTIONS}
+      onLoad={onLoad}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-
-      <MapUpdater
-        center={searchCenter}
-        zoom={getZoomForRadius(raioMetros)}
-      />
-
       {searchCenter && (
         <>
-          <Marker position={searchCenter} icon={WORK_ICON}>
-            <Popup>
-              <span className="text-sm font-semibold">Ponto de refer\u00eancia</span>
-            </Popup>
-          </Marker>
+          <Marker
+            position={searchCenter}
+            icon={{
+              url: WORK_MARKER_SVG,
+              scaledSize: new google.maps.Size(40, 40),
+              anchor: new google.maps.Point(20, 20),
+            }}
+            zIndex={1000}
+          />
           <Circle
             center={searchCenter}
             radius={raioMetros}
-            pathOptions={{
-              color: '#0284c7',
+            options={{
               fillColor: '#0284c7',
-              fillOpacity: 0.08,
-              weight: 2,
-              dashArray: '6 4',
+              fillOpacity: 0.06,
+              strokeColor: '#0284c7',
+              strokeOpacity: 0.4,
+              strokeWeight: 2,
             }}
           />
         </>
       )}
 
-      {imoveis.map((imovel) => (
-        <Marker
-          key={imovel.id}
-          position={[imovel.lat, imovel.lon]}
-          icon={createPropertyIcon(imovel.tipologia, highlightedId === imovel.id)}
-          eventHandlers={{
-            mouseover: () => onMarkerHover(imovel.id),
-            mouseout: () => onMarkerHover(null),
-            click: () => onMarkerClick(imovel.id),
-          }}
+      {imoveis.map((imovel) => {
+        const isHl = highlightedId === imovel.id;
+        const color = getMarkerColor(imovel.tipologia);
+        return (
+          <Marker
+            key={imovel.id}
+            position={{ lat: imovel.lat, lng: imovel.lon }}
+            icon={{
+              url: buildMarkerSvg(color, isHl),
+              scaledSize: new google.maps.Size(isHl ? 40 : 28, isHl ? 40 : 28),
+              anchor: new google.maps.Point(isHl ? 20 : 14, isHl ? 20 : 14),
+            }}
+            zIndex={isHl ? 999 : 1}
+            onMouseOver={() => onMarkerHover(imovel.id)}
+            onMouseOut={() => onMarkerHover(null)}
+            onClick={() => handleMarkerClick(imovel)}
+          />
+        );
+      })}
+
+      {selectedImovel && (
+        <InfoWindow
+          position={{ lat: selectedImovel.lat, lng: selectedImovel.lon }}
+          onCloseClick={() => setSelectedImovel(null)}
+          options={{ pixelOffset: new google.maps.Size(0, -14), maxWidth: 280 }}
         >
-          <Popup>
-            <div className="min-w-[200px]">
-              {imovel.imagem_url && (
-                <img
-                  src={imovel.imagem_url}
-                  alt={imovel.titulo}
-                  className="w-full h-24 object-cover rounded mb-2"
-                />
-              )}
-              <p className="font-semibold text-sm">{imovel.titulo || 'Sem t\u00edtulo'}</p>
-              <p className="text-sky-700 font-bold text-sm mt-1">
-                {imovel.preco > 0 ? `${imovel.preco}\u20ac/m\u00eas` : 'Consultar'}
-              </p>
-              {imovel.tipologia && <p className="text-xs text-slate-500 mt-0.5">{imovel.tipologia.toUpperCase()}</p>}
-              {imovel.dist_metros != null && (
-                <p className="text-xs text-slate-500">{formatDistance(imovel.dist_metros)} de dist\u00e2ncia</p>
-              )}
-              <a
-                href={imovel.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-2 px-3 py-1 bg-sky-600 text-white text-xs font-semibold rounded hover:bg-sky-700 transition-colors"
-              >
-                Ver An\u00fancio
-              </a>
+          <div style={{ fontFamily: 'Inter, system-ui, sans-serif', minWidth: 220 }}>
+            {selectedImovel.imagem_url && (
+              <img
+                src={selectedImovel.imagem_url}
+                alt={selectedImovel.titulo}
+                style={{ width: '100%', height: 100, objectFit: 'cover', borderRadius: 8, marginBottom: 8 }}
+              />
+            )}
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#1e293b', lineHeight: 1.3 }}>
+              {selectedImovel.titulo || 'Sem titulo'}
             </div>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+            <div style={{ fontSize: 16, fontWeight: 700, color: '#0284c7', marginTop: 4 }}>
+              {selectedImovel.preco > 0 ? `${selectedImovel.preco}\u20ac/mes` : 'Consultar'}
+            </div>
+            <div style={{ display: 'flex', gap: 12, marginTop: 6, fontSize: 12, color: '#64748b' }}>
+              {selectedImovel.tipologia && (
+                <span style={{ textTransform: 'uppercase', fontWeight: 600 }}>{selectedImovel.tipologia}</span>
+              )}
+              {selectedImovel.area_m2 > 0 && <span>{selectedImovel.area_m2}m2</span>}
+              {selectedImovel.dist_metros != null && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  {formatDistance(selectedImovel.dist_metros)}
+                </span>
+              )}
+            </div>
+            <a
+              href={selectedImovel.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+                marginTop: 8, padding: '6px 14px',
+                backgroundColor: '#0284c7', color: '#ffffff',
+                borderRadius: 8, fontSize: 12, fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Ver Anuncio
+            </a>
+          </div>
+        </InfoWindow>
+      )}
+    </GoogleMap>
   );
 }
-
-export { APARTMENT_ICON };
