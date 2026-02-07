@@ -1,91 +1,38 @@
-╔════════════════════════════════════════════════════════════╗
-║        LUGAR PORTUGAL - COMANDOS PARA SERVIDOR LINUX      ║
-╚════════════════════════════════════════════════════════════╝
+═══════════════════════════════════════════════════════════
+🚀 COLOCAR NO AR AGORA - 3 PASSOS
+═══════════════════════════════════════════════════════════
 
+1. Entre no Streamlit Cloud:
+   https://share.streamlit.io/
 
-🚀 INICIALIZAÇÃO SUPER RÁPIDA (1 COMANDO)
-════════════════════════════════════════════════════════════
-./start_server.sh
+2. Faça upload de 2 arquivos:
+   • app.py
+   • requirements.txt
 
-✅ Isso vai:
-   - Criar/ativar ambiente virtual Python
-   - Instalar dependências automaticamente
-   - Iniciar motor de scraping em background
-   - Servir a aplicação na porta 8080
+3. Clique em "Deploy"
 
+PRONTO! Sua aplicação estará em:
+https://aluguelimoveis-queo6rsnzidypueducznxq.streamlit.app/
 
-📋 COMANDOS INDIVIDUAIS (SE PREFERIR CONTROLE MANUAL)
-════════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════
+✅ JÁ ESTÁ CONFIGURADO:
+═══════════════════════════════════════════════════════════
 
-1️⃣  Criar ambiente virtual Python:
-    python3 -m venv venv
+✓ Supabase conectado (mesmo banco do app antigo)
+✓ Google Maps funcionando
+✓ Design moderno com gradiente roxo
+✓ Busca por cidade
+✓ Marcadores coloridos no mapa
+✓ Stats de quantos imóveis existem
+✓ Popups com detalhes dos imóveis
 
-2️⃣  Ativar ambiente virtual:
-    source venv/bin/activate
+═══════════════════════════════════════════════════════════
+🧪 TESTAR LOCALMENTE (OPCIONAL):
+═══════════════════════════════════════════════════════════
 
-3️⃣  Instalar dependências:
-    pip install -r motor_busca/requirements.txt
+pip install -r requirements.txt
+streamlit run app.py
 
-4️⃣  Rodar motor em background:
-    nohup python3 motor_turbo.py > motor_turbo.log 2>&1 &
+Acesse: http://localhost:8501
 
-5️⃣  Servir aplicação web:
-    cd dist && python3 -m http.server 8080
-
-
-🔍 MONITORAMENTO
-════════════════════════════════════════════════════════════
-
-Ver logs do motor em tempo real:
-    tail -f motor_turbo.log
-
-Ver processos Python rodando:
-    ps aux | grep python
-
-Matar o motor turbo:
-    pkill -f motor_turbo.py
-
-
-🌐 ACESSAR A APLICAÇÃO
-════════════════════════════════════════════════════════════
-
-Servidor local:
-    http://localhost:8080
-
-Servidor remoto:
-    http://SEU-IP-SERVIDOR:8080
-
-
-⚙️  CONFIGURAÇÃO NECESSÁRIA
-════════════════════════════════════════════════════════════
-
-Edite o arquivo .env com suas credenciais:
-    nano .env
-
-Variáveis obrigatórias:
-    VITE_SUPABASE_URL=...
-    VITE_SUPABASE_ANON_KEY=...
-    VITE_GOOGLE_MAPS_API_KEY=...
-    SUPABASE_SERVICE_KEY=...
-
-
-🎉 FUNCIONALIDADES ATIVAS
-════════════════════════════════════════════════════════════
-
-✓ Google Maps com estilo Silver elegante
-✓ Marcadores coloridos por tipo de imóvel
-✓ Modal de Membro Fundador (aparece após 30s)
-✓ Motor de scraping em loop infinito (5-10 min)
-✓ Atualização automática de resultados
-✓ Design vibrante e responsivo
-✓ Filtros avançados de busca
-
-
-💡 DICA FINAL
-════════════════════════════════════════════════════════════
-
-Para produção, use Nginx + Systemd:
-    Veja instruções completas em: INSTRUCOES_SERVIDOR.md
-
-
-Agora é só relaxar e deixar o sistema trabalhar! 🎯
+═══════════════════════════════════════════════════════════
