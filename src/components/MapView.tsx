@@ -237,7 +237,7 @@ export default function MapView({
             position={searchCenter}
             icon={workLocationIcon}
             zIndex={1000}
-            title="Local de trabalho"
+            title="LOCAL"
           />
           <Circle
             center={searchCenter}

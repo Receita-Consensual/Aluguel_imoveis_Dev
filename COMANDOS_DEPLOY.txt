@@ -1,0 +1,42 @@
+═══════════════════════════════════════════════════════════
+⚡ COMANDOS RÁPIDOS DE DEPLOY
+═══════════════════════════════════════════════════════════
+
+🚀 DEPLOY AUTOMÁTICO (VERCEL):
+./deploy_vercel.sh
+
+───────────────────────────────────────────────────────────
+
+🧪 TESTAR LOCALMENTE:
+npm run preview -- --host 0.0.0.0 --port 5173
+
+───────────────────────────────────────────────────────────
+
+🔨 REBUILD (SE MUDOU ALGO):
+npm run build
+
+───────────────────────────────────────────────────────────
+
+📦 DEPLOY MANUAL NO VERCEL:
+npm i -g vercel
+cd dist
+vercel --prod
+
+───────────────────────────────────────────────────────────
+
+🌐 DEPLOY NO NETLIFY:
+1. Acesse: https://app.netlify.com/drop
+2. Arraste a pasta "dist"
+
+───────────────────────────────────────────────────────────
+
+📋 VERIFICAR BUILD:
+ls -lh dist/
+
+───────────────────────────────────────────────────────────
+
+🔑 CREDENCIAIS (JÁ CONFIGURADAS):
+Supabase: https://zprocqmlefzjrepxtxko.supabase.co
+Google Maps: AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4
+
+═══════════════════════════════════════════════════════════
