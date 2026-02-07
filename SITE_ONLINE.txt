@@ -1,0 +1,34 @@
+🎉 SITE LUGAR ESTÁ NO AR! 🎉
+================================
+
+✅ Streamlit funcionando em: http://localhost:8501
+✅ Banco de dados Supabase conectado
+✅ 36 imóveis disponíveis
+✅ 1 demanda cadastrada
+
+🔍 TESTADO E FUNCIONANDO:
+- Conexão com Supabase OK
+- Carregamento de imóveis OK
+- Variáveis de ambiente OK
+
+📊 DADOS NO BANCO:
+- Tabela imoveis: 36 registros
+- Tabela demandas: 1 registro
+- Tabela alertas_fundador: 0 registros
+
+🌐 COMO ACESSAR:
+Abra seu navegador e vá para:
+http://localhost:8501
+
+🚀 COMO PARAR O SERVIDOR:
+pkill -f streamlit
+
+🔄 COMO REINICIAR:
+./rodar_streamlit.sh
+
+💡 LOGS DO SERVIDOR:
+tail -f streamlit.log
+
+================================
+Desenvolvido por Lugar
+Busca inteligente de imóveis em Portugal

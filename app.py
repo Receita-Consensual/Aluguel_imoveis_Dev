@@ -175,8 +175,8 @@ from pathlib import Path
 env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(env_path)
 
-GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else (os.getenv("GOOGLE_API_KEY") or os.getenv("GOOGLE_GEOCODING_KEY", ""))
-SUPABASE_URL = st.secrets.get("SUPABASE_URL") if hasattr(st, 'secrets') and 'SUPABASE_URL' in st.secrets else os.getenv("SUPABASE_URL", "")
+GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else (os.getenv("GOOGLE_API_KEY") or os.getenv("GOOGLE_GEOCODING_KEY") or os.getenv("VITE_GOOGLE_MAPS_API_KEY", ""))
+SUPABASE_URL = st.secrets.get("SUPABASE_URL") if hasattr(st, 'secrets') and 'SUPABASE_URL' in st.secrets else (os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL", ""))
 SUPABASE_KEY = st.secrets.get("SUPABASE_ANON_KEY") if hasattr(st, 'secrets') and 'SUPABASE_ANON_KEY' in st.secrets else (os.getenv("SUPABASE_ANON_KEY") or os.getenv("VITE_SUPABASE_ANON_KEY", ""))
 
 # Debug - verificar se as variáveis foram carregadas
