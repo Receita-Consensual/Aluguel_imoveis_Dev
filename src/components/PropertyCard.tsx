@@ -17,9 +17,9 @@ function formatDistance(meters?: number): string {
 
 function getTipoBadgeColor(tipo: string): string {
   const t = tipo.toLowerCase();
-  if (t.includes('moradia') || t.includes('casa')) return 'bg-emerald-100 text-emerald-800';
-  if (t.includes('quarto')) return 'bg-amber-100 text-amber-800';
-  return 'bg-teal-100 text-teal-800';
+  if (t.includes('moradia') || t.includes('casa')) return 'bg-blue-100 text-blue-800';
+  if (t.includes('quarto')) return 'bg-slate-100 text-slate-800';
+  return 'bg-sky-100 text-sky-800';
 }
 
 interface PropertyCardProps {
@@ -37,7 +37,7 @@ export default function PropertyCard({ imovel, isHighlighted, onHover }: Propert
       onMouseLeave={() => onHover(null)}
       className={`group bg-white rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-slate-200/60 ${
         isHighlighted
-          ? 'border-teal-400 shadow-lg shadow-teal-100/50 ring-1 ring-teal-200'
+          ? 'border-blue-400 shadow-lg shadow-blue-100/50 ring-1 ring-blue-200'
           : 'border-slate-200/80'
       }`}
     >
@@ -82,7 +82,7 @@ export default function PropertyCard({ imovel, isHighlighted, onHover }: Propert
             </p>
           </div>
           <div className="text-right shrink-0">
-            <span className="text-base font-bold text-teal-700">
+            <span className="text-base font-bold text-blue-700">
               {imovel.preco > 0 ? `${imovel.preco}\u20AC` : 'Consultar'}
             </span>
             {imovel.preco > 0 && <span className="text-[11px] text-slate-400 block">/m\u00EAs</span>}
@@ -114,7 +114,7 @@ export default function PropertyCard({ imovel, isHighlighted, onHover }: Propert
             href={imovel.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-lg text-xs font-semibold transition-all ml-auto shadow-md shadow-cyan-200/50"
+            className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg text-xs font-semibold transition-all ml-auto shadow-md shadow-blue-200/50"
           >
             Ver An\u00FAncio
             <ExternalLink className="w-3 h-3" />

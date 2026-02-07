@@ -101,7 +101,7 @@ export default function SearchBar({ onSearch, onLocateMe, isSearching }: SearchB
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
             placeholder="Onde vais trabalhar? Ex: Universidade de Aveiro"
-            className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400 transition-all"
+            className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-300 transition-all"
           />
           {inputValue && (
             <button
@@ -118,9 +118,9 @@ export default function SearchBar({ onSearch, onLocateMe, isSearching }: SearchB
                 <button
                   key={i}
                   onClick={() => handleSelect(s)}
-                  className="w-full flex items-start gap-2.5 px-3.5 py-2.5 hover:bg-teal-50 text-left transition-colors border-b border-slate-100 last:border-0"
+                  className="w-full flex items-start gap-2.5 px-3.5 py-2.5 hover:bg-blue-50 text-left transition-colors border-b border-slate-100 last:border-0"
                 >
-                  <MapPin className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" />
+                  <MapPin className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
                   <span className="text-sm text-slate-700 leading-snug line-clamp-2">
                     {s.display_name}
                   </span>
@@ -140,7 +140,7 @@ export default function SearchBar({ onSearch, onLocateMe, isSearching }: SearchB
                 onClick={() => setRaio(opt.value)}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                   raio === opt.value
-                    ? 'bg-teal-600 text-white shadow-sm shadow-teal-200'
+                    ? 'bg-blue-500 text-white shadow-sm shadow-blue-200'
                     : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'
                 }`}
               >
@@ -161,7 +161,7 @@ export default function SearchBar({ onSearch, onLocateMe, isSearching }: SearchB
             <span className="hidden sm:inline">Minha localiza\u00E7\u00E3o</span>
           </button>
           {(isSearching || isLoading) && (
-            <div className="flex items-center gap-2 px-4 py-2.5 text-teal-600 text-sm font-medium">
+            <div className="flex items-center gap-2 px-4 py-2.5 text-blue-600 text-sm font-medium">
               <Loader2 className="w-4 h-4 animate-spin" />
               A procurar...
             </div>

@@ -45,7 +45,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
               onClick={() => toggleTipologia(value)}
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 filters.tipologias.includes(value)
-                  ? 'bg-teal-600 text-white shadow-sm'
+                  ? 'bg-blue-500 text-white shadow-sm'
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -68,7 +68,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={50}
             value={filters.precoMin}
             onChange={(e) => onChange({ ...filters, precoMin: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-500"
           />
         </div>
         <div>
@@ -82,7 +82,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={50}
             value={filters.precoMax}
             onChange={(e) => onChange({ ...filters, precoMax: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-500"
           />
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={10}
             value={filters.areaMin}
             onChange={(e) => onChange({ ...filters, areaMin: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-500"
           />
         </div>
         <div>
@@ -113,7 +113,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={10}
             value={filters.areaMax}
             onChange={(e) => onChange({ ...filters, areaMax: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-blue-500"
           />
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
               onClick={() => onChange({ ...filters, mobiliado: opt })}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 filters.mobiliado === opt
-                  ? 'bg-teal-600 text-white shadow-sm'
+                  ? 'bg-blue-500 text-white shadow-sm'
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >

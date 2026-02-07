@@ -96,11 +96,11 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-100">
       <Header onFounderClick={() => setShowFounder(true)} />
 
       <div className="flex-1 pt-14 flex flex-col lg:flex-row overflow-hidden">
-        <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200 bg-white overflow-hidden">
+        <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200/60 bg-white/80 backdrop-blur-sm overflow-hidden">
           <div className="p-3 space-y-3 overflow-y-auto flex-1">
             <SearchBar
               onSearch={handleSearch}
