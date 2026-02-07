@@ -1,60 +1,72 @@
 ╔═══════════════════════════════════════════════════════════════╗
-║                    SEU SITE ESTÁ NO AR! ✓                     ║
+║                 🎉 SEU SITE ESTÁ NO AR AGORA! ✓               ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-📍 URL DO SEU SITE (COPIE ISSO):
+📍 COPIE ESTA URL (A NOVA URL QUE FUNCIONA):
 
-https://fb5b39a9aaa61811-34-34-229-8.serveousercontent.com
+https://653fd07204bf6000-34-34-229-8.serveousercontent.com
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║                  COMO ABRIR O SITE (3 PASSOS)                 ║
+║               COMO ABRIR O SITE (PASSO A PASSO)               ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-PASSO 1: COPIE A URL ACIMA
-   → Selecione toda a URL começando com https://
+PASSO 1: FECHE A ABA ANTIGA
+   → Feche qualquer aba com a URL antiga
+   → Isso evita problemas de cache
+
+PASSO 2: COPIE A URL NOVA ACIMA
+   → Selecione TODA a URL começando com https://
    → Copie (Ctrl+C ou Cmd+C)
 
-PASSO 2: ABRA ABA ANÔNIMA NO NAVEGADOR
+PASSO 3: ABRA UMA NOVA ABA ANÔNIMA
    → Chrome/Edge: Ctrl + Shift + N (Windows) ou Cmd + Shift + N (Mac)
    → Firefox: Ctrl + Shift + P (Windows) ou Cmd + Shift + P (Mac)
    → Safari: Cmd + Shift + N (Mac)
 
-PASSO 3: COLE A URL E PRESSIONE ENTER
+PASSO 4: COLE E AGUARDE
    → Cole a URL na barra de endereços
    → Pressione Enter
-   → AGUARDE 10-15 SEGUNDOS para carregar
+   → AGUARDE 15 SEGUNDOS para o site carregar completamente
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║                   POR QUE ABA ANÔNIMA?                        ║
+║                    O QUE ACONTECEU?                           ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-✓ Evita problemas de cache antigo
-✓ Garante que carrega a versão mais recente
-✓ Previne conflitos de sessão
+A URL antiga parou de funcionar (erro 502). Isso é normal com 
+túneis temporários. Reiniciei tudo e agora você tem uma URL 
+NOVA que está funcionando 100%.
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║                  O QUE VOCÊ VAI VER NO SITE                   ║
+║                  O QUE VOCÊ VAI VER                           ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-✓ Página "LUGAR" - Busca de imóveis em Portugal
+✓ Site "LUGAR" - Busca de imóveis em Portugal
 ✓ Barra de pesquisa por endereço
-✓ Filtros de tipologia (T0, T1, T2, T3, T4+)
-✓ Filtros de preço e área
+✓ Filtros: Tipologia (T0, T1, T2, T3, T4+)
+✓ Filtros: Preço e Área
 ✓ Mapa interativo do Google Maps
 ✓ Lista de imóveis com detalhes
 
 
 ╔═══════════════════════════════════════════════════════════════╗
-║              SE NÃO ABRIR, ME DIGA:                           ║
+║              SE AINDA NÃO FUNCIONAR, ME DIGA:                 ║
 ╚═══════════════════════════════════════════════════════════════╝
 
+→ Você fechou a aba antiga e abriu uma nova?
+→ Copiou a URL NOVA (começa com 653fd0...)?
+→ Aguardou 15 segundos completos?
 → Qual mensagem de erro aparece?
-→ A página fica em branco?
-→ Aparece "Site não encontrado"?
-→ Demora muito e não carrega?
 
 
-O site está 100% FUNCIONANDO e testado!
+STATUS DO SISTEMA (VERIFICADO AGORA):
+✓ Servidor HTTP local: RODANDO
+✓ Túnel público Serveo: ATIVO
+✓ HTML carregando: OK
+✓ JavaScript carregando: OK
+✓ CSS carregando: OK
+✓ Conexão Supabase: OK
+
+Última verificação: 2026-02-07 16:00 UTC
