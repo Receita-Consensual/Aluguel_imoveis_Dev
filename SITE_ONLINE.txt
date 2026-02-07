@@ -1,34 +1,41 @@
-🎉 SITE LUGAR ESTÁ NO AR! 🎉
-================================
+========================================
+SITE LUGAR ONLINE - REACT APP
+========================================
 
-✅ Streamlit funcionando em: http://localhost:8501
-✅ Banco de dados Supabase conectado
-✅ 36 imóveis disponíveis
-✅ 1 demanda cadastrada
+URL PUBLICA:
+https://8bd1a2fa561523cf-34-34-229-124.serveousercontent.com
 
-🔍 TESTADO E FUNCIONANDO:
-- Conexão com Supabase OK
-- Carregamento de imóveis OK
-- Variáveis de ambiente OK
+Status: FUNCIONANDO
 
-📊 DADOS NO BANCO:
-- Tabela imoveis: 36 registros
-- Tabela demandas: 1 registro
-- Tabela alertas_fundador: 0 registros
+Data: 2026-02-07
+Servidor: Python HTTP Server (porta 8080)
+Tunel: Serveo.net
 
-🌐 COMO ACESSAR:
-Abra seu navegador e vá para:
-http://localhost:8501
+========================================
+COMO VERIFICAR SE ESTA RODANDO
+========================================
 
-🚀 COMO PARAR O SERVIDOR:
-pkill -f streamlit
+1. Verificar servidor local:
+   curl http://localhost:8080
 
-🔄 COMO REINICIAR:
-./rodar_streamlit.sh
+2. Verificar processos:
+   ps aux | grep -E "python3.*http.server|ssh.*serveo"
 
-💡 LOGS DO SERVIDOR:
-tail -f streamlit.log
+3. Testar URL publica:
+   curl https://8bd1a2fa561523cf-34-34-229-124.serveousercontent.com
 
-================================
-Desenvolvido por Lugar
-Busca inteligente de imóveis em Portugal
+========================================
+COMO REINICIAR SE PARAR
+========================================
+
+Execute este comando unico:
+
+pkill -9 python3; pkill -9 ssh; rm -rf public dist && mkdir -p public && echo '' > public/.gitkeep && npm run build && python3 -m http.server 8080 --bind 0.0.0.0 --directory dist > /tmp/server.log 2>&1 & sleep 3 && ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R 80:localhost:8080 serveo.net > /tmp/serveo.log 2>&1 & sleep 8 && grep -o "https://[a-z0-9\-]*\.serveousercontent\.com" /tmp/serveo.log
+
+========================================
+CONEXAO COM BANCO DE DADOS
+========================================
+
+O site esta conectado ao Supabase e pronto para uso!
+
+Credenciais estao no arquivo .env
