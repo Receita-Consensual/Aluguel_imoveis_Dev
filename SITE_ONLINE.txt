@@ -3,11 +3,11 @@ SITE LUGAR ONLINE - REACT APP
 ========================================
 
 URL PUBLICA:
-https://8bd1a2fa561523cf-34-34-229-124.serveousercontent.com
+https://a46a59471dbab23e-34-34-229-32.serveousercontent.com
 
-Status: FUNCIONANDO
+Status: ONLINE E FUNCIONANDO
 
-Data: 2026-02-07
+Data: 2026-02-07 14:30 UTC
 Servidor: Python HTTP Server (porta 8080)
 Tunel: Serveo.net
 
@@ -22,7 +22,7 @@ COMO VERIFICAR SE ESTA RODANDO
    ps aux | grep -E "python3.*http.server|ssh.*serveo"
 
 3. Testar URL publica:
-   curl https://8bd1a2fa561523cf-34-34-229-124.serveousercontent.com
+   curl https://a46a59471dbab23e-34-34-229-32.serveousercontent.com
 
 ========================================
 COMO REINICIAR SE PARAR
