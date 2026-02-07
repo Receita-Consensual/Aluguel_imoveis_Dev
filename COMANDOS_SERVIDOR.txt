@@ -1,0 +1,284 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║     🚀 COMANDOS PARA COPIAR E COLAR NO SERVIDOR LINUX         ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════
+
+📋 INSTALAÇÃO RÁPIDA (COPIE TUDO DE UMA VEZ):
+
+# 1. Instalar dependências do sistema
+sudo apt update && sudo apt install -y python3 python3-pip python3-venv chromium-browser chromium-chromedriver git
+
+# 2. Ir para home
+cd ~
+
+# 3. Clonar repositório (SE TIVER NO GITHUB)
+git clone https://github.com/SEU_USUARIO/SEU_REPO.git lugar-motor
+cd lugar-motor
+
+# OU criar pasta (SE FOR COPIAR MANUALMENTE)
+mkdir -p ~/lugar-motor
+cd ~/lugar-motor
+# Agora use FileZilla/WinSCP para copiar arquivos
+
+# 4. Criar ambiente virtual
+python3 -m venv venv
+source venv/bin/activate
+
+# 5. Instalar dependências Python
+pip install selenium beautifulsoup4 python-dotenv requests supabase geopy
+
+═══════════════════════════════════════════════════════════════════
+
+🔐 CONFIGURAR VARIÁVEIS DE AMBIENTE:
+
+# Criar arquivo .env
+nano .env
+
+# Cole isto (TROQUE AS KEYS PELAS SUAS):
+SUPABASE_URL=https://zprocqmlefzjrepxtxko.supabase.co
+SUPABASE_SERVICE_KEY=sua_service_key_completa_aqui
+GOOGLE_GEOCODING_KEY=AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4
+
+# Salvar: CTRL+O, ENTER, CTRL+X
+
+═══════════════════════════════════════════════════════════════════
+
+🧪 TESTAR O MOTOR:
+
+cd ~/lugar-motor
+source venv/bin/activate
+python3 motor_busca/motor.py
+
+# Se funcionar, verá:
+# - "Buscando demandas pendentes..."
+# - "Scraping iniciado..."
+# - "X imóveis salvos"
+
+═══════════════════════════════════════════════════════════════════
+
+⏰ OPÇÃO 1: RODAR A CADA HORA (CRON - SIMPLES):
+
+# Editar cron
+crontab -e
+
+# Adicionar esta linha (TROCAR SEU_USUARIO):
+0 * * * * cd /home/SEU_USUARIO/lugar-motor && /home/SEU_USUARIO/lugar-motor/venv/bin/python3 motor_busca/motor.py >> /home/SEU_USUARIO/motor.log 2>&1
+
+# Salvar: CTRL+O, ENTER, CTRL+X
+
+# Ver logs depois:
+tail -f ~/motor.log
+
+═══════════════════════════════════════════════════════════════════
+
+🔄 OPÇÃO 2: RODAR AUTOMATICAMENTE (SYSTEMD - PROFISSIONAL):
+
+# Usar script automático
+cd ~/lugar-motor
+bash criar_servico.sh
+
+# Ou manual - criar serviço
+sudo nano /etc/systemd/system/lugar-motor.service
+
+# Cole isto (TROCAR SEU_USUARIO):
+[Unit]
+Description=Motor de Busca Lugar
+After=network.target
+
+[Service]
+Type=simple
+User=SEU_USUARIO
+WorkingDirectory=/home/SEU_USUARIO/lugar-motor
+Environment="PATH=/home/SEU_USUARIO/lugar-motor/venv/bin"
+ExecStart=/home/SEU_USUARIO/lugar-motor/venv/bin/python3 /home/SEU_USUARIO/lugar-motor/motor_busca/motor.py
+Restart=always
+RestartSec=3600
+
+[Install]
+WantedBy=multi-user.target
+
+# Salvar: CTRL+O, ENTER, CTRL+X
+
+# Ativar serviço
+sudo systemctl daemon-reload
+sudo systemctl enable lugar-motor
+sudo systemctl start lugar-motor
+
+═══════════════════════════════════════════════════════════════════
+
+📊 MONITORAR O MOTOR:
+
+# Ver status (systemd)
+sudo systemctl status lugar-motor
+
+# Ver logs em tempo real
+tail -f ~/motor.log
+
+# Ver últimas 50 linhas
+tail -n 50 ~/motor.log
+
+# Ver processos rodando
+ps aux | grep motor
+
+# Ver próxima execução (timer)
+systemctl list-timers | grep lugar
+
+═══════════════════════════════════════════════════════════════════
+
+🛠️ COMANDOS DE MANUTENÇÃO:
+
+# Parar motor
+sudo systemctl stop lugar-motor
+
+# Reiniciar motor
+sudo systemctl restart lugar-motor
+
+# Desabilitar motor
+sudo systemctl disable lugar-motor
+
+# Atualizar código (se no Git)
+cd ~/lugar-motor
+git pull origin main
+sudo systemctl restart lugar-motor
+
+# Reativar ambiente virtual
+cd ~/lugar-motor
+source venv/bin/activate
+
+═══════════════════════════════════════════════════════════════════
+
+🚨 TROUBLESHOOTING:
+
+# Motor não roda - verificar Python
+python3 --version
+
+# Motor não roda - verificar dependências
+cd ~/lugar-motor
+source venv/bin/activate
+pip list
+
+# Motor não roda - verificar .env
+cat ~/lugar-motor/.env
+
+# Motor não roda - testar conexão Supabase
+cd ~/lugar-motor
+source venv/bin/activate
+python3 -c "from motor_busca.config import SUPABASE_URL; print(SUPABASE_URL)"
+
+# ChromeDriver não funciona
+sudo apt install chromium-browser chromium-chromedriver -y
+
+# Erro de permissão
+chmod +x motor_busca/motor.py
+
+# Ver logs de erro (systemd)
+sudo journalctl -u lugar-motor -n 100
+
+═══════════════════════════════════════════════════════════════════
+
+📁 ESTRUTURA DE ARQUIVOS NO SERVIDOR:
+
+~/lugar-motor/
+├── motor_busca/
+│   ├── motor.py          ← Script principal
+│   ├── config.py         ← Configurações
+│   ├── db.py             ← Conexão Supabase
+│   ├── scraper_sapo.py   ← Scraper Sapo
+│   ├── scraper_idealista.py ← Scraper Idealista
+│   ├── geocoder.py       ← Geocoding
+│   └── requirements.txt  ← Dependências
+├── venv/                 ← Ambiente virtual Python
+├── .env                  ← SUAS CREDENCIAIS (não commitar!)
+└── motor.log             ← Logs de execução
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 CHECKLIST DE INSTALAÇÃO:
+
+[ ] 1. Python 3 instalado
+[ ] 2. ChromeDriver instalado
+[ ] 3. Pasta ~/lugar-motor criada
+[ ] 4. Código copiado/clonado
+[ ] 5. Ambiente virtual criado (venv)
+[ ] 6. Dependências instaladas (pip)
+[ ] 7. Arquivo .env configurado
+[ ] 8. Teste manual funcionou
+[ ] 9. Cron ou Systemd configurado
+[ ] 10. Logs sendo gerados
+
+═══════════════════════════════════════════════════════════════════
+
+💡 DICAS:
+
+1. Use "screen" para deixar processos rodando:
+   screen -S motor
+   python3 motor_busca/motor.py
+   # CTRL+A, D para desanexar
+   screen -r motor  # para voltar
+
+2. Redirecionar logs:
+   python3 motor_busca/motor.py > motor.log 2>&1
+
+3. Rodar em background:
+   nohup python3 motor_busca/motor.py &
+
+4. Ver uso de recursos:
+   htop  # (instalar: sudo apt install htop)
+
+═══════════════════════════════════════════════════════════════════
+
+📞 COMANDOS DE EMERGÊNCIA:
+
+# Parar tudo que está rodando relacionado ao motor
+pkill -f motor.py
+
+# Limpar logs antigos
+> ~/motor.log
+
+# Remover serviço completamente
+sudo systemctl stop lugar-motor
+sudo systemctl disable lugar-motor
+sudo rm /etc/systemd/system/lugar-motor.service
+sudo systemctl daemon-reload
+
+# Remover cron
+crontab -e
+# Deletar linha com motor.py
+
+═══════════════════════════════════════════════════════════════════
+
+✅ VERIFICAÇÃO FINAL:
+
+Depois de configurar, verifique:
+
+1. Motor rodou pelo menos uma vez:
+   cat ~/motor.log
+
+2. Dados chegaram no Supabase:
+   # Ver no Supabase Dashboard → Table Editor → imoveis
+
+3. Serviço está ativo:
+   sudo systemctl status lugar-motor
+
+4. Próxima execução agendada:
+   systemctl list-timers
+
+═══════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTAÇÃO COMPLETA:
+
+- INSTALAR_MOTOR_SERVIDOR.md  → Guia passo a passo detalhado
+- instalar_servidor.sh        → Script de instalação automática
+- criar_servico.sh            → Script para criar serviço systemd
+
+═══════════════════════════════════════════════════════════════════
+
+Última atualização: 2026-02-07
+Sistema testado: Ubuntu 20.04, 22.04, Debian 11
+
+╔════════════════════════════════════════════════════════════════╗
+║        🎉 BOA SORTE COM A INSTALAÇÃO!                         ║
+╚════════════════════════════════════════════════════════════════╝
