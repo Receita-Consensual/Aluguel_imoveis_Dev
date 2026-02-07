@@ -1,0 +1,94 @@
+╔══════════════════════════════════════════════════════════════╗
+║       GUIA DE INSTALAÇÃO NO SERVIDOR - PASSO A PASSO        ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 PASSO 1: COPIAR ARQUIVOS PARA O SERVIDOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ CONCLUÍDO - Você já copiou os arquivos do pendrive!
+
+
+📦 PASSO 2: INSTALAR TODAS AS DEPENDÊNCIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Execute no terminal:
+
+    cd ~/Aluguel_imoveis_Dev
+    chmod +x instalar_tudo.sh
+    bash instalar_tudo.sh
+
+⏱️  Tempo estimado: 5-10 minutos
+💡 Este script instala tudo automaticamente!
+
+
+🔑 PASSO 3: CONFIGURAR ARQUIVO .ENV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Copie o modelo:
+    cp .env.example .env
+
+2. Edite o arquivo:
+    nano .env
+
+3. Preencha com suas credenciais do Supabase:
+   - SUPABASE_URL (encontre em: Settings > API > Project URL)
+   - SUPABASE_KEY (encontre em: Settings > API > anon/public)
+   - SUPABASE_SERVICE_KEY (encontre em: Settings > API > service_role)
+
+4. Salve: Ctrl+O, Enter, Ctrl+X
+
+
+🚀 PASSO 4: TESTAR O MOTOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Execute:
+
+    source venv/bin/activate
+    python3 motor_turbo.py
+
+Ou use o script:
+
+    chmod +x rodar_motor.sh
+    bash rodar_motor.sh
+
+
+⚙️  PASSO 5: CONFIGURAR PARA RODAR AUTOMATICAMENTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Execute:
+
+    chmod +x criar_servico.sh
+    sudo bash criar_servico.sh
+
+
+📊 COMANDOS ÚTEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ver status do serviço:
+    sudo systemctl status motor_busca
+
+Parar o serviço:
+    sudo systemctl stop motor_busca
+
+Iniciar o serviço:
+    sudo systemctl start motor_busca
+
+Ver logs em tempo real:
+    sudo journalctl -u motor_busca -f
+
+
+❓ PROBLEMAS COMUNS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. "ModuleNotFoundError":
+   → Execute novamente: bash instalar_tudo.sh
+
+2. "No module named 'dotenv'":
+   → Ative o ambiente virtual: source venv/bin/activate
+
+3. "Supabase connection error":
+   → Verifique as credenciais no arquivo .env
+
+4. "Permission denied":
+   → Execute: chmod +x *.sh
+
+
+📞 SUPORTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Se encontrar problemas, envie:
+- A mensagem de erro completa
+- O resultado de: python3 --version
+- O resultado de: pip list | grep -E "dotenv|supabase|selenium"
