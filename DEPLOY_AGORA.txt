@@ -1,0 +1,182 @@
+═══════════════════════════════════════════════════════════════
+🚀 DEPLOY NO STREAMLIT CLOUD - AGORA!
+═══════════════════════════════════════════════════════════════
+
+✅ TUDO ESTÁ PRONTO! Vamos colocar no ar em 5 minutos!
+
+
+═══════════════════════════════════════════════════════════════
+📋 PASSO A PASSO COMPLETO:
+═══════════════════════════════════════════════════════════════
+
+PASSO 1: Subir para o GitHub
+-----------------------------
+
+1. Abra o terminal na pasta do projeto
+
+2. Execute estes comandos:
+
+git add .
+git commit -m "App pronto para deploy"
+git push origin main
+
+(Se pedir usuário/senha, use o token do GitHub)
+
+
+PASSO 2: Ir para Streamlit Cloud
+---------------------------------
+
+1. Abra: https://share.streamlit.io/
+
+2. Faça login com GitHub
+
+3. Clique no botão: "Create app" ou "New app"
+
+
+PASSO 3: Configurar o Deploy
+-----------------------------
+
+Na tela que abrir, preencha:
+
+┌─────────────────────────────────────────────┐
+│ Repository:                                 │
+│ → Selecione seu repositório do projeto     │
+│                                             │
+│ Branch:                                     │
+│ → main (ou master)                          │
+│                                             │
+│ Main file path:                             │
+│ → app.py                                    │
+│                                             │
+│ App URL (optional):                         │
+│ → Deixe em branco ou escolha um nome       │
+└─────────────────────────────────────────────┘
+
+4. Clique em "Deploy!"
+
+
+PASSO 4: Aguardar (2-3 minutos)
+--------------------------------
+
+Você verá:
+- "Starting up..."
+- "Installing dependencies..."
+- "Running app.py..."
+
+Aguarde até aparecer o app funcionando!
+
+
+═══════════════════════════════════════════════════════════════
+❌ SE DER ERRO "Oh no."
+═══════════════════════════════════════════════════════════════
+
+1. Clique em "Manage app" (botão vermelho no canto)
+
+2. Clique em "Logs" no menu lateral
+
+3. COPIE tudo que aparece nos logs
+
+4. ME ENVIE aqui que eu corrijo na hora!
+
+
+OU use o app de debug:
+
+1. No Streamlit Cloud, clique em "⚙️ Settings"
+
+2. Em "Main file path" mude para: app_debug.py
+
+3. Clique "Save"
+
+4. Veja qual teste falha
+
+5. ME ENVIE o resultado
+
+
+═══════════════════════════════════════════════════════════════
+✅ SE FUNCIONAR (esperado!)
+═══════════════════════════════════════════════════════════════
+
+Você verá:
+- 🏠 Lugar
+- Barra de busca
+- Mapa de Portugal
+
+Copie a URL e me envie!
+
+O site estará disponível em:
+https://[seu-username]-[repo-name].streamlit.app
+
+
+═══════════════════════════════════════════════════════════════
+🎯 CHECKLIST ANTES DE DEPLOY:
+═══════════════════════════════════════════════════════════════
+
+☑ Arquivos no repositório GitHub:
+  ✅ app.py (na raiz)
+  ✅ app_debug.py (na raiz)
+  ✅ requirements.txt (na raiz)
+  ✅ .streamlit/config.toml
+
+☑ Credenciais Supabase:
+  ✅ Já estão no app.py
+  ✅ URL: zprocqmlefzjrepxtxko.supabase.co
+  ✅ Key: eyJhbG... (já configurada)
+
+☑ Dependências:
+  ✅ requirements.txt atualizado
+  ✅ Versões corretas
+
+TUDO OK! 🎉
+
+
+═══════════════════════════════════════════════════════════════
+💡 DICAS:
+═══════════════════════════════════════════════════════════════
+
+- O deploy leva 2-3 minutos na primeira vez
+- Se der erro, NÃO ENTRE EM PÂNICO! É fácil de resolver
+- Use app_debug.py para diagnosticar problemas
+- Sempre que fizer mudanças:
+  1. git add .
+  2. git commit -m "mensagem"
+  3. git push
+  4. Streamlit atualiza automaticamente!
+
+
+═══════════════════════════════════════════════════════════════
+🔗 LINKS ÚTEIS:
+═══════════════════════════════════════════════════════════════
+
+Streamlit Cloud: https://share.streamlit.io/
+Documentação: https://docs.streamlit.io/
+Supabase Dashboard: https://app.supabase.com/
+
+
+═══════════════════════════════════════════════════════════════
+❓ PROBLEMAS COMUNS:
+═══════════════════════════════════════════════════════════════
+
+"Repository not found"
+→ Certifique-se que o repo é público ou deu acesso ao Streamlit
+
+"Main file not found"
+→ Certifique-se que app.py está na RAIZ do repositório
+
+"Module not found"
+→ Verifique se requirements.txt está na RAIZ
+
+"Connection error"
+→ Problema com Supabase - verifique credenciais
+
+
+═══════════════════════════════════════════════════════════════
+🚀 AGORA É SÓ SEGUIR OS PASSOS ACIMA!
+═══════════════════════════════════════════════════════════════
+
+1. git push (se não fez ainda)
+2. https://share.streamlit.io/
+3. Create app
+4. Selecionar repo e app.py
+5. Deploy!
+
+ME ENVIE O LINK quando estiver no ar! 🎉
