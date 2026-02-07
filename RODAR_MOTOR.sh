@@ -1,29 +1,19 @@
 #!/bin/bash
 
-echo "════════════════════════════════════════════════════════"
-echo "🤖 INICIANDO MOTOR INFINITO"
-echo "════════════════════════════════════════════════════════"
-echo ""
+echo "========================================"
+echo "INICIANDO MOTOR DE BUSCA"
+echo "========================================"
 
-# Instalar dependências
-echo "📦 Instalando dependências..."
-pip install -r motor_busca/requirements.txt
+# Ativar ambiente virtual
+source venv/bin/activate
 
-echo ""
-echo "✅ Dependências instaladas!"
-echo ""
-echo "🚀 Iniciando motor em background..."
-echo ""
+# Verificar se .env existe
+if [ ! -f .env ]; then
+    echo "ERRO: Arquivo .env não encontrado!"
+    echo "Crie o arquivo .env com suas credenciais do Supabase"
+    exit 1
+fi
 
-# Rodar motor em background
-nohup python3 motor_infinito.py > motor.log 2>&1 &
-
-echo "✅ Motor rodando!"
-echo ""
-echo "📊 Para ver logs em tempo real:"
-echo "   tail -f motor.log"
-echo ""
-echo "🛑 Para parar o motor:"
-echo "   pkill -f motor_infinito.py"
-echo ""
-echo "════════════════════════════════════════════════════════"
+# Rodar motor
+echo "Iniciando motor_turbo.py..."
+python3 motor_turbo.py
