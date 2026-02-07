@@ -69,8 +69,8 @@ st.markdown("""
 
 # --- 3. CONEXÕES ---
 GOOGLE_API_KEY = "AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4"
-SUPABASE_URL = "https://zprocqmlefzjrepxtxko.supabase.co"
-SUPABASE_KEY = "sb_publishable_wPBDEtqfKPrYMD6m6IJzWw_VWL9sVlM"
+SUPABASE_URL = "https://ilxxwjbgrkecdvmxwlvr.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlseHh3amJncmtlY2R2bXh3bHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MjgzNjYsImV4cCI6MjA4NjAwNDM2Nn0.mWPj-lI3BYXCOCuzzH4-7A4n3rq-knJoeWLbRaYGNFk"
 
 @st.cache_resource
 def init_connection():

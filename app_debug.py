@@ -40,8 +40,8 @@ try:
     st.write("5. Testando conexão Supabase...")
     from supabase import create_client
 
-    SUPABASE_URL = "https://zprocqmlefzjrepxtxko.supabase.co"
-    SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpwcm9jcW1sZWZ6anJlcHh0eGtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgyMjgyODIsImV4cCI6MjA1MzgwNDI4Mn0.wg6f1uejAzG-Ss1e6hFCaDpoBPrP4xDIgAiNf0pFjMw"
+    SUPABASE_URL = "https://ilxxwjbgrkecdvmxwlvr.supabase.co"
+    SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlseHh3amJncmtlY2R2bXh3bHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MjgzNjYsImV4cCI6MjA4NjAwNDM2Nn0.mWPj-lI3BYXCOCuzzH4-7A4n3rq-knJoeWLbRaYGNFk"
 
     client = create_client(SUPABASE_URL, SUPABASE_KEY)
     st.success("✅ Conexão Supabase OK")

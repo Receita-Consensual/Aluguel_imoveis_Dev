@@ -1,0 +1,126 @@
+═══════════════════════════════════════════════════════════════
+✅ PROBLEMA DA API KEY RESOLVIDO!
+═══════════════════════════════════════════════════════════════
+
+🔧 O QUE FOI CORRIGIDO:
+
+O erro era: "Invalid API key"
+
+O problema: O app.py estava usando credenciais antigas/incorretas do Supabase.
+
+A solução: Atualizei todas as credenciais para as corretas!
+
+
+═══════════════════════════════════════════════════════════════
+🚀 COMO ATUALIZAR NO STREAMLIT CLOUD:
+═══════════════════════════════════════════════════════════════
+
+OPÇÃO 1 - Git Push (Recomendado):
+----------------------------------
+
+1. Abra o terminal na pasta do projeto
+
+2. Execute:
+   git add .
+   git commit -m "Corrigir credenciais Supabase"
+   git push origin main
+
+3. Aguarde 1-2 minutos
+
+4. O Streamlit Cloud vai detectar a mudança e atualizar automaticamente
+
+5. Recarregue a página do seu app
+
+6. ✅ PRONTO! Deve funcionar agora!
+
+
+OPÇÃO 2 - Reboot Manual:
+-------------------------
+
+1. No Streamlit Cloud, clique em "⚙️ Settings"
+
+2. Role até o final da página
+
+3. Clique em "Reboot app"
+
+4. Aguarde 1-2 minutos
+
+5. Recarregue a página
+
+
+OPÇÃO 3 - Recriar o App:
+-------------------------
+
+Se as opções acima não funcionarem:
+
+1. No Streamlit Cloud, clique em "⚙️ Settings"
+
+2. Role até o final
+
+3. Clique em "Delete app"
+
+4. Confirme
+
+5. Vá em https://share.streamlit.io/
+
+6. Clique "Create app"
+
+7. Selecione seu repositório
+
+8. Main file: app.py
+
+9. Deploy!
+
+
+═══════════════════════════════════════════════════════════════
+📋 VERIFICAÇÃO:
+═══════════════════════════════════════════════════════════════
+
+Após atualizar, o app deve:
+
+✅ Carregar sem erro "Invalid API key"
+✅ Mostrar o mapa de Portugal
+✅ Permitir buscar por cidades
+✅ Mostrar imóveis no mapa (se houver dados)
+
+
+═══════════════════════════════════════════════════════════════
+❓ AINDA COM PROBLEMAS?
+═══════════════════════════════════════════════════════════════
+
+Se ainda der erro:
+
+1. Veja os logs no Streamlit Cloud:
+   - Clique em "Manage app"
+   - Vá em "Logs"
+   - COPIE o erro completo
+
+2. Ou use o app de debug:
+   - No Settings, mude Main file para: app_debug.py
+   - Veja qual teste falha
+   - ME ENVIE o resultado
+
+
+═══════════════════════════════════════════════════════════════
+✅ CREDENCIAIS ATUALIZADAS EM:
+═══════════════════════════════════════════════════════════════
+
+- ✅ app.py
+- ✅ app_debug.py
+- ✅ streamlit_app/app.py
+- ✅ motor_busca/config.py (já estava correto, lê do .env)
+
+
+═══════════════════════════════════════════════════════════════
+🎯 PRÓXIMO PASSO:
+═══════════════════════════════════════════════════════════════
+
+Execute no terminal:
+
+git add .
+git commit -m "Corrigir credenciais Supabase"
+git push origin main
+
+E aguarde 2 minutos. O app vai atualizar automaticamente!
+
+═══════════════════════════════════════════════════════════════
