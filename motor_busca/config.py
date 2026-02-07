@@ -1,8 +1,13 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://ilxxwjbgrkecdvmxwlvr.supabase.co")
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(env_path)
+
+SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
-GOOGLE_GEOCODING_KEY = os.getenv("GOOGLE_GEOCODING_KEY", "AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4")
+GOOGLE_GEOCODING_KEY = os.getenv("GOOGLE_GEOCODING_KEY") or os.getenv("VITE_GOOGLE_MAPS_API_KEY", "")
 
 CIDADES_PORTUGAL = [
     "Lisboa", "Porto", "Aveiro", "Braga", "Coimbra", "Faro", "Leiria",
