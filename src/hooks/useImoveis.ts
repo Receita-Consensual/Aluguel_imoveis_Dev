@@ -13,21 +13,27 @@ export function useImoveis() {
     raioMetros: number
   ): Promise<Imovel[]> => {
     setLoading(true);
-    const { data, error } = await supabase.rpc('imoveis_no_raio', {
-      p_lat: lat,
-      p_lon: lon,
-      p_raio_metros: raioMetros,
-    });
+    try {
+      const { data, error } = await supabase.rpc('imoveis_no_raio', {
+        p_lat: lat,
+        p_lon: lon,
+        p_raio_metros: raioMetros,
+      });
 
-    setLoading(false);
-    if (error) {
+      setLoading(false);
+      if (error) {
+        console.error('Search error:', error);
+        return [];
+      }
+
+      const results = (data || []) as Imovel[];
+      setImoveis(results);
+      return results;
+    } catch (error) {
       console.error('Search error:', error);
+      setLoading(false);
       return [];
     }
-
-    const results = (data || []) as Imovel[];
-    setImoveis(results);
-    return results;
   }, []);
 
   const searchByViewport = useCallback(async (
@@ -36,19 +42,23 @@ export function useImoveis() {
     maxLat: number,
     maxLon: number
   ) => {
-    const { data, error } = await supabase.rpc('imoveis_na_viewport', {
-      p_min_lat: minLat,
-      p_min_lon: minLon,
-      p_max_lat: maxLat,
-      p_max_lon: maxLon,
-    });
+    try {
+      const { data, error } = await supabase.rpc('imoveis_na_viewport', {
+        p_min_lat: minLat,
+        p_min_lon: minLon,
+        p_max_lat: maxLat,
+        p_max_lon: maxLon,
+      });
 
-    if (error) {
+      if (error) {
+        console.error('Viewport search error:', error);
+        return;
+      }
+
+      setImoveis((data || []) as Imovel[]);
+    } catch (error) {
       console.error('Viewport search error:', error);
-      return;
     }
-
-    setImoveis((data || []) as Imovel[]);
   }, []);
 
   const createDemanda = useCallback(async (
@@ -57,12 +67,16 @@ export function useImoveis() {
     lon: number,
     raioKm: number
   ) => {
-    await supabase.from('demandas').insert({
-      termo,
-      lat_centro: lat,
-      lon_centro: lon,
-      raio_km: raioKm,
-    });
+    try {
+      await supabase.from('demandas').insert({
+        termo,
+        lat_centro: lat,
+        lon_centro: lon,
+        raio_km: raioKm,
+      });
+    } catch (error) {
+      console.error('Error creating demanda:', error);
+    }
   }, []);
 
   const pollForResults = useCallback(async (
