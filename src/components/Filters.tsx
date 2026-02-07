@@ -28,11 +28,11 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 sm:p-4 space-y-3">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200/80 p-3 sm:p-4 space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-slate-900">Filtros</span>
         <span className="text-xs text-slate-500">
-          {resultCount} {resultCount === 1 ? 'im\u00f3vel' : 'im\u00f3veis'} {raioLabel && `num raio de ${raioLabel}`}
+          {resultCount} {resultCount === 1 ? 'im\u00F3vel' : 'im\u00F3veis'} {raioLabel && `num raio de ${raioLabel}`}
         </span>
       </div>
 
@@ -45,7 +45,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
               onClick={() => toggleTipologia(value)}
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 filters.tipologias.includes(value)
-                  ? 'bg-sky-600 text-white shadow-sm'
+                  ? 'bg-teal-600 text-white shadow-sm'
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -59,7 +59,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-slate-500 font-medium mb-1 block">
-            Pre\u00e7o min ({filters.precoMin}\u20ac)
+            Pre\u00E7o min ({filters.precoMin}\u20AC)
           </label>
           <input
             type="range"
@@ -68,12 +68,12 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={50}
             value={filters.precoMin}
             onChange={(e) => onChange({ ...filters, precoMin: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-sky-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
           />
         </div>
         <div>
           <label className="text-xs text-slate-500 font-medium mb-1 block">
-            Pre\u00e7o m\u00e1x ({filters.precoMax}\u20ac)
+            Pre\u00E7o m\u00E1x ({filters.precoMax}\u20AC)
           </label>
           <input
             type="range"
@@ -82,7 +82,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={50}
             value={filters.precoMax}
             onChange={(e) => onChange({ ...filters, precoMax: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-sky-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
           />
         </div>
       </div>
@@ -90,7 +90,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="text-xs text-slate-500 font-medium mb-1 block">
-            \u00c1rea min ({filters.areaMin}m\u00b2)
+            \u00C1rea min ({filters.areaMin}m\u00B2)
           </label>
           <input
             type="range"
@@ -99,12 +99,12 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={10}
             value={filters.areaMin}
             onChange={(e) => onChange({ ...filters, areaMin: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-sky-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
           />
         </div>
         <div>
           <label className="text-xs text-slate-500 font-medium mb-1 block">
-            \u00c1rea m\u00e1x ({filters.areaMax}m\u00b2)
+            \u00C1rea m\u00E1x ({filters.areaMax}m\u00B2)
           </label>
           <input
             type="range"
@@ -113,7 +113,7 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
             step={10}
             value={filters.areaMax}
             onChange={(e) => onChange({ ...filters, areaMax: Number(e.target.value) })}
-            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-sky-600"
+            className="w-full h-1.5 bg-slate-200 rounded-full appearance-none cursor-pointer accent-teal-600"
           />
         </div>
       </div>
@@ -127,11 +127,11 @@ export default function Filters({ filters, onChange, resultCount, raioLabel }: F
               onClick={() => onChange({ ...filters, mobiliado: opt })}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 filters.mobiliado === opt
-                  ? 'bg-sky-600 text-white shadow-sm'
+                  ? 'bg-teal-600 text-white shadow-sm'
                   : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
-              {opt === 'todos' ? 'Todos' : opt === 'sim' ? 'Sim' : 'N\u00e3o'}
+              {opt === 'todos' ? 'Todos' : opt === 'sim' ? 'Sim' : 'N\u00E3o'}
             </button>
           ))}
         </div>

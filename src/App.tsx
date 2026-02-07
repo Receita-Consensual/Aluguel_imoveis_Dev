@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react';
-import GoogleMapsProvider from './components/GoogleMapsProvider';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import Filters from './components/Filters';
@@ -89,26 +88,65 @@ function App() {
   }, []);
 
   return (
-    <GoogleMapsProvider>
-      <div className="h-screen flex flex-col bg-slate-50">
-        <Header onFounderClick={() => setShowFounder(true)} />
+    <div className="h-screen flex flex-col bg-slate-50">
+      <Header onFounderClick={() => setShowFounder(true)} />
 
-        <div className="flex-1 pt-14 flex flex-col lg:flex-row overflow-hidden">
-          <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200 bg-white overflow-hidden">
-            <div className="p-3 space-y-3 overflow-y-auto flex-1">
-              <SearchBar
-                onSearch={handleSearch}
-                onLocateMe={handleLocateMe}
-                isSearching={isSearching}
+      <div className="flex-1 pt-14 flex flex-col lg:flex-row overflow-hidden">
+        <aside className="hidden lg:flex lg:w-[420px] xl:w-[460px] flex-col border-r border-slate-200 bg-white overflow-hidden">
+          <div className="p-3 space-y-3 overflow-y-auto flex-1">
+            <SearchBar
+              onSearch={handleSearch}
+              onLocateMe={handleLocateMe}
+              isSearching={isSearching}
+            />
+            {hasSearched && (
+              <Filters
+                filters={filters}
+                onChange={setFilters}
+                resultCount={filteredImoveis.length}
+                raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
               />
-              {hasSearched && (
-                <Filters
-                  filters={filters}
-                  onChange={setFilters}
-                  resultCount={filteredImoveis.length}
-                  raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
-                />
-              )}
+            )}
+            <PropertyList
+              imoveis={filteredImoveis}
+              loading={loading}
+              polling={polling}
+              hasSearched={hasSearched}
+              highlightedId={highlightedId}
+              onHover={setHighlightedId}
+              scrollToId={scrollToId}
+            />
+          </div>
+        </aside>
+
+        <main className="flex-1 relative">
+          <div className="lg:hidden absolute top-3 left-3 right-3 z-[999]">
+            <SearchBar
+              onSearch={handleSearch}
+              onLocateMe={handleLocateMe}
+              isSearching={isSearching}
+            />
+          </div>
+
+          <MapView
+            imoveis={filteredImoveis}
+            searchCenter={searchCenter}
+            raioMetros={raioMetros}
+            highlightedId={highlightedId}
+            onMarkerHover={setHighlightedId}
+            onMarkerClick={handleMarkerClick}
+          />
+
+          <MobileDrawer resultCount={filteredImoveis.length}>
+            {hasSearched && (
+              <Filters
+                filters={filters}
+                onChange={setFilters}
+                resultCount={filteredImoveis.length}
+                raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
+              />
+            )}
+            <div className="mt-3">
               <PropertyList
                 imoveis={filteredImoveis}
                 loading={loading}
@@ -119,53 +157,12 @@ function App() {
                 scrollToId={scrollToId}
               />
             </div>
-          </aside>
-
-          <main className="flex-1 relative">
-            <div className="lg:hidden absolute top-3 left-3 right-3 z-[999]">
-              <SearchBar
-                onSearch={handleSearch}
-                onLocateMe={handleLocateMe}
-                isSearching={isSearching}
-              />
-            </div>
-
-            <MapView
-              imoveis={filteredImoveis}
-              searchCenter={searchCenter}
-              raioMetros={raioMetros}
-              highlightedId={highlightedId}
-              onMarkerHover={setHighlightedId}
-              onMarkerClick={handleMarkerClick}
-            />
-
-            <MobileDrawer resultCount={filteredImoveis.length}>
-              {hasSearched && (
-                <Filters
-                  filters={filters}
-                  onChange={setFilters}
-                  resultCount={filteredImoveis.length}
-                  raioLabel={RADIUS_LABELS[raioMetros] || `${raioMetros}m`}
-                />
-              )}
-              <div className="mt-3">
-                <PropertyList
-                  imoveis={filteredImoveis}
-                  loading={loading}
-                  polling={polling}
-                  hasSearched={hasSearched}
-                  highlightedId={highlightedId}
-                  onHover={setHighlightedId}
-                  scrollToId={scrollToId}
-                />
-              </div>
-            </MobileDrawer>
-          </main>
-        </div>
-
-        <FounderSection visible={showFounder} onClose={() => setShowFounder(false)} />
+          </MobileDrawer>
+        </main>
       </div>
-    </GoogleMapsProvider>
+
+      <FounderSection visible={showFounder} onClose={() => setShowFounder(false)} />
+    </div>
   );
 }
 

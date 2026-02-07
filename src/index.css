@@ -19,59 +19,32 @@
 }
 
 @layer components {
-  .gm-style .gm-style-iw-c {
+  .leaflet-popup-content-wrapper {
     border-radius: 12px !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
     padding: 0 !important;
   }
 
-  .gm-style .gm-style-iw-d {
-    overflow: auto !important;
+  .leaflet-popup-content {
+    margin: 12px !important;
   }
 
-  .gm-style .gm-style-iw-tc::after {
-    background: white !important;
+  .leaflet-popup-tip {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   }
 
-  .pac-container {
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    margin-top: 4px;
-    font-family: 'Inter', system-ui, sans-serif;
-    z-index: 10000 !important;
+  .leaflet-popup-close-button {
+    color: #64748b !important;
+    font-size: 18px !important;
+    padding: 6px 8px !important;
   }
 
-  .pac-item {
-    padding: 8px 14px;
-    font-size: 13px;
-    color: #334155;
-    border-bottom: 1px solid #f1f5f9;
-    cursor: pointer;
-    line-height: 1.5;
+  .leaflet-popup-close-button:hover {
+    color: #0f172a !important;
   }
 
-  .pac-item:hover {
-    background-color: #f0f9ff;
-  }
-
-  .pac-item-selected {
-    background-color: #e0f2fe;
-  }
-
-  .pac-icon {
-    display: none;
-  }
-
-  .pac-item-query {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0f172a;
-  }
-
-  .pac-matched {
-    font-weight: 700;
-    color: #0284c7;
+  .leaflet-container {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   }
 }
 
@@ -91,12 +64,27 @@
     }
   }
 
+  .animate-slide-up {
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #0284c7;
+    background: #0d9488;
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -106,7 +94,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #0284c7;
+    background: #0d9488;
     cursor: pointer;
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
