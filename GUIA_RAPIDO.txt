@@ -1,0 +1,73 @@
+════════════════════════════════════════════════════════
+🚨 GUIA RÁPIDO - COLOCAR TUDO NO AR AGORA
+════════════════════════════════════════════════════════
+
+═══ PARTE 1: SITE (STREAMLIT CLOUD) ═══
+
+1. Abra: https://share.streamlit.io/
+
+2. Faça login e encontre seu app
+
+3. Cole o arquivo app.py (DA RAIZ, NÃO DA PASTA streamlit_app)
+
+4. Cole o arquivo requirements.txt:
+   streamlit==1.32.0
+   supabase==2.3.4
+   pandas==2.2.0
+   folium==0.15.1
+   streamlit-folium==0.16.0
+   requests==2.31.0
+   numpy==1.26.3
+
+5. SALVE e aguarde 1-2 minutos
+
+✅ SITE FUNCIONANDO!
+
+
+═══ PARTE 2: MOTOR INFINITO (SUA MÁQUINA) ═══
+
+1. Vá para a pasta do projeto:
+   cd /caminho/para/projeto
+
+2. Instale dependências do motor:
+   pip install -r motor_busca/requirements.txt
+
+3. Rode o motor em background:
+   nohup python3 motor_infinito.py > motor.log 2>&1 &
+
+4. Veja os logs em tempo real:
+   tail -f motor.log
+
+5. Para parar o motor:
+   pkill -f motor_infinito.py
+
+✅ MOTOR FUNCIONANDO!
+
+
+═══ TESTANDO ═══
+
+1. Abra seu site no navegador
+2. Digite "Porto" e clique em BUSCAR
+3. Olhe o motor.log - ele vai detectar a demanda
+4. Aguarde 5-10 minutos
+5. Recarregue o site - novos imóveis aparecerão!
+
+
+═══ PROBLEMAS? ═══
+
+❌ Site não carrega?
+   → Verifique se usou o app.py DA RAIZ (não o da pasta streamlit_app)
+   → Confirme que o requirements.txt está correto
+
+❌ Motor não roda?
+   → Instale: pip install supabase selenium beautifulsoup4 requests python-dotenv
+   → Verifique o .env tem as credenciais corretas
+
+❌ Não aparecem imóveis?
+   → Aguarde o motor processar (5-10 min após buscar)
+   → Verifique motor.log para ver se está funcionando
+
+
+════════════════════════════════════════════════════════
+AGORA VAI! 🚀
+════════════════════════════════════════════════════════
