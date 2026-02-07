@@ -3,10 +3,12 @@
 ═══════════════════════════════════════════════════════════
 
 ✅ JÁ ESTÁ CONFIGURADO:
-  • Supabase: https://zprocqmlefzjrepxtxko.supabase.co (mesmo do Streamlit)
-  • Google Maps: AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4
+  • Supabase: Configurado via .env (não commitado)
+  • Google Maps: Configurado via .env (não commitado)
   • Marcador "LOCAL" personalizado
   • Build pronto na pasta /dist
+
+⚠️ IMPORTANTE: Todas as API keys estão protegidas no arquivo .env
 
 ═══════════════════════════════════════════════════════════
 🎯 OPÇÃO 1: DEPLOY RÁPIDO COM VERCEL (RECOMENDADO)

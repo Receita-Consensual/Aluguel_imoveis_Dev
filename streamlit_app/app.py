@@ -67,10 +67,12 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. CONEXÕES ---
-GOOGLE_API_KEY = "AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4"
-SUPABASE_URL = "https://ilxxwjbgrkecdvmxwlvr.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlseHh3amJncmtlY2R2bXh3bHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MjgzNjYsImV4cCI6MjA4NjAwNDM2Nn0.mWPj-lI3BYXCOCuzzH4-7A4n3rq-knJoeWLbRaYGNFk"
+# --- 3. CONEXÕES (SEGURAS) ---
+import os
+
+GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else os.getenv("GOOGLE_GEOCODING_KEY", "")
+SUPABASE_URL = st.secrets.get("SUPABASE_URL") if hasattr(st, 'secrets') and 'SUPABASE_URL' in st.secrets else os.getenv("SUPABASE_URL", "")
+SUPABASE_KEY = st.secrets.get("SUPABASE_ANON_KEY") if hasattr(st, 'secrets') and 'SUPABASE_ANON_KEY' in st.secrets else os.getenv("VITE_SUPABASE_ANON_KEY", "")
 
 @st.cache_resource
 def init_connection():
