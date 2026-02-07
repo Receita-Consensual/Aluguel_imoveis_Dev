@@ -1,0 +1,44 @@
+🎯 LEIA AQUI PRIMEIRO - INÍCIO RÁPIDO
+═══════════════════════════════════════
+
+✅ TUDO FOI CORRIGIDO!
+
+Os erros que você teve foram:
+- ❌ Função get_supabase_client não existia → ✅ CORRIGIDO
+- ❌ Função upsert_imoveis_supabase errada → ✅ CORRIGIDO
+- ❌ Importações incorretas → ✅ CORRIGIDO
+
+
+🚀 PARA COLOCAR NO AR AGORA:
+
+═══ SITE ═══
+1. Vá em: https://share.streamlit.io/
+2. Faça login e clique em "New app"
+3. Selecione o arquivo: app.py
+4. Clique em "Deploy"
+5. PRONTO! Aguarde 2 minutos.
+
+═══ MOTOR ═══
+1. Abra o terminal na pasta do projeto
+2. Execute:
+
+   pip install -r motor_busca/requirements.txt
+   chmod +x RODAR_MOTOR.sh
+   ./RODAR_MOTOR.sh
+
+3. PRONTO! O motor está rodando.
+
+
+📖 QUER MAIS DETALHES?
+Abra o arquivo: TUTORIAL_COMPLETO.txt
+
+
+❓ PRECISA DE AJUDA?
+- Site não carrega? → Aguarde 3 minutos após deploy
+- Motor dá erro? → Certifique-se que instalou as dependências
+- Sem imóveis? → Aguarde 10 minutos após primeira busca
+
+
+═══════════════════════════════════════
+TUDO SIMPLES E FUNCIONANDO! 🎉
+═══════════════════════════════════════

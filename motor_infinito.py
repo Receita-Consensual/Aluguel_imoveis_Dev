@@ -14,10 +14,9 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent / "motor_busca"))
 
 from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY
-from motor_busca.db import get_supabase_client
-from motor_busca.geocoder import geocode_place
-from motor_busca.scraper_sapo import scrape_sapo
-from motor_busca.motor import upsert_imoveis_supabase
+from motor_busca.db import get_supabase_client, upsert_imoveis
+from motor_busca.geocoder import geocode_address
+from motor_busca.scraper_sapo import scrape_cidade as scrape_sapo
 
 def print_header(texto):
     """Imprime cabeçalho formatado"""
@@ -69,7 +68,7 @@ def processar_demandas_pendentes():
             try:
                 # Scraping SAPO
                 print_status("🔍", f"Iniciando scraping no SAPO...")
-                imoveis = scrape_sapo(termo_busca, raio_metros)
+                imoveis = scrape_sapo(termo_busca)
                 print_status("✅", f"Encontrados {len(imoveis)} imóveis")
 
                 if imoveis:
@@ -78,10 +77,10 @@ def processar_demandas_pendentes():
                     for imovel in imoveis:
                         if not imovel.get('lat') or not imovel.get('lon'):
                             endereco = f"{imovel.get('endereco', '')}, {imovel.get('cidade', '')}, Portugal"
-                            coords = geocode_place(endereco)
+                            coords = geocode_address(endereco)
                             if coords:
-                                imovel['lat'] = coords['lat']
-                                imovel['lon'] = coords['lon']
+                                imovel['lat'] = coords[0]
+                                imovel['lon'] = coords[1]
 
                         # Calcular distância do ponto de busca
                         if imovel.get('lat') and imovel.get('lon') and lat and lng:
@@ -102,7 +101,7 @@ def processar_demandas_pendentes():
 
                     # Salvar no banco
                     print_status("💾", "Salvando imóveis no banco de dados...")
-                    upsert_imoveis_supabase(supabase, imoveis)
+                    upsert_imoveis(supabase, imoveis)
                     print_status("✅", "Imóveis salvos com sucesso!")
 
                 # Marcar como concluído

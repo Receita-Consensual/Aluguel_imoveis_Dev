@@ -1,0 +1,105 @@
+═══════════════════════════════════════════════════════════════
+🚀 TUTORIAL COMPLETO - COLOCAR TUDO NO AR EM 5 MINUTOS
+═══════════════════════════════════════════════════════════════
+
+═══ PARTE 1: SITE (Streamlit Cloud) ═══
+
+1. Acesse: https://share.streamlit.io/
+
+2. Faça login com GitHub
+
+3. Clique em "New app" ou "Deploy an app"
+
+4. No campo "Main file path" coloque: app.py
+
+5. Clique em "Deploy"
+
+✅ SITE NO AR! Vai demorar 2-3 minutos para ficar online.
+
+
+═══ PARTE 2: MOTOR INFINITO (Sua máquina) ═══
+
+OPÇÃO A - Script Automático (RECOMENDADO):
+-------------------------------------------
+
+1. Abra o terminal na pasta do projeto
+
+2. Execute ESTES 3 COMANDOS:
+
+   pip install -r motor_busca/requirements.txt
+
+   chmod +x RODAR_MOTOR.sh
+
+   ./RODAR_MOTOR.sh
+
+
+OPÇÃO B - Manual:
+-----------------
+
+1. Instale as dependências:
+   pip install -r motor_busca/requirements.txt
+
+2. Rode o motor:
+   nohup python3 motor_infinito.py > motor.log 2>&1 &
+
+3. Veja os logs:
+   tail -f motor.log
+
+
+═══ PARA PARAR O MOTOR ═══
+
+Execute:
+   pkill -f motor_infinito.py
+
+
+═══ TESTANDO SE FUNCIONA ═══
+
+1. Abra o site que você colocou no ar
+
+2. Digite "Porto" e clique em BUSCAR
+
+3. No terminal do motor, veja os logs:
+   tail -f motor.log
+
+4. Você verá o motor detectar a demanda e buscar imóveis
+
+5. Aguarde 5-10 minutos
+
+6. Recarregue o site - novos imóveis de Porto aparecerão!
+
+
+═══ SOLUÇÃO DE PROBLEMAS ═══
+
+❌ Erro "cannot import name 'get_supabase_client'"
+   → RESOLVIDO! Use o arquivo motor_infinito.py atualizado
+
+❌ Erro "No module named..."
+   → Execute: pip install -r motor_busca/requirements.txt
+
+❌ Site não carrega nada
+   → Aguarde 2-3 minutos após deploy no Streamlit
+   → Recarregue a página
+
+❌ Motor não encontra imóveis
+   → Aguarde 10-15 minutos na primeira execução
+   → Verifique o motor.log: tail -f motor.log
+
+
+═══ COMANDOS ÚTEIS ═══
+
+Ver se o motor está rodando:
+   ps aux | grep motor_infinito
+
+Ver os logs do motor:
+   tail -f motor.log
+
+Ver últimas 50 linhas do log:
+   tail -n 50 motor.log
+
+Parar o motor:
+   pkill -f motor_infinito.py
+
+
+═══════════════════════════════════════════════════════════════
+✅ PRONTO! AGORA ESTÁ TUDO FUNCIONANDO!
+═══════════════════════════════════════════════════════════════

@@ -12,6 +12,9 @@ def get_client():
         )
     return create_client(SUPABASE_URL, key)
 
+# Alias para compatibilidade
+get_supabase_client = lambda url=None, key=None: get_client()
+
 
 def upsert_imoveis(client, imoveis: list[dict]) -> int:
     if not imoveis:
