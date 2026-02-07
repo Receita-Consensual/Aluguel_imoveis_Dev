@@ -1,15 +1,1 @@
-cd ~/Aluguel_imoveis_Dev && rm -f teste_conexao.py && cat > teste_conexao.py << 'EOF'
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent / "motor_busca"))
-from supabase import create_client
-from selenium import webdriver
-from bs4 import BeautifulSoup
-from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY
-from motor_busca.db import get_supabase_client
-supabase = get_supabase_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-supabase.table('imoveis').select('id').limit(1).execute()
-supabase.table('demandas').select('count', count='exact').execute()
-print("OK")
-EOF
-python3 teste_conexao.py
+cd ~/Aluguel_imoveis_Dev && python3 -c "import sys; from pathlib import Path; sys.path.insert(0, str(Path.cwd() / 'motor_busca')); from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY; from motor_busca.db import get_supabase_client; supabase = get_supabase_client(SUPABASE_URL, SUPABASE_SERVICE_KEY); supabase.table('imoveis').select('id').limit(1).execute(); print('OK')"
