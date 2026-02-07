@@ -74,6 +74,15 @@ def parse_area(text: str) -> float:
     return 0
 
 
+def extract_real_link(href: str) -> str:
+    match = re.search(r"l=(https://casa\.sapo\.pt/[^&?]+)", href)
+    if match:
+        return match.group(1)
+    if href.startswith("http"):
+        return href
+    return BASE_URL + href
+
+
 def scrape_cidade(cidade: str) -> list[dict]:
     distrito = SLUG_DISTRITOS.get(cidade)
     if not distrito:
@@ -94,51 +103,61 @@ def scrape_cidade(cidade: str) -> list[dict]:
                 break
 
             soup = BeautifulSoup(resp.text, "html.parser")
-            items = soup.select(".property-list .searchResultProperty")
-
-            if not items:
-                items = soup.select(".property-list .property-info-content, .searchResults .property")
+            items = soup.select("div.property")
 
             if not items:
                 break
 
+            parsed_count = 0
             for item in items:
                 try:
-                    link_el = item.select_one("a[href]")
-                    if not link_el:
+                    info = item.select_one("a.property-info")
+                    if not info:
                         continue
 
-                    href = link_el.get("href", "")
-                    if not href.startswith("http"):
-                        href = BASE_URL + href
+                    price_type_el = info.select_one(".property-price-type")
+                    price_type = price_type_el.get_text(strip=True).lower() if price_type_el else ""
+                    if "alugar" not in price_type and "arrendar" not in price_type:
+                        continue
 
-                    title_el = item.select_one(".property-type, .property-info h2, a span")
-                    title = title_el.get_text(strip=True) if title_el else ""
+                    href = info.get("href", "")
+                    link = extract_real_link(href)
 
-                    price_el = item.select_one(".property-price, .priceFirst")
-                    price_text = price_el.get_text(strip=True) if price_el else "0"
+                    type_el = info.select_one(".property-type")
+                    title = type_el.get_text(strip=True) if type_el else ""
+
+                    price_val_el = info.select_one(".property-price-value")
+                    price_text = price_val_el.get_text(strip=True) if price_val_el else "0"
                     preco = parse_price(price_text)
 
-                    area_el = item.select_one(".property-features, .property-features-text")
-                    area_text = area_el.get_text(strip=True) if area_el else ""
-                    area = parse_area(area_text)
+                    features_el = info.select_one(".property-features-text")
+                    features_text = features_el.get_text(strip=True) if features_el else ""
+                    area = parse_area(features_text)
+
+                    loc_el = info.select_one(".property-location")
+                    endereco = loc_el.get_text(strip=True) if loc_el else ""
 
                     img_el = item.select_one("img")
                     img_url = ""
                     if img_el:
-                        img_url = img_el.get("src", "") or img_el.get("data-original", "")
+                        src = img_el.get("src", "")
+                        if src and not src.startswith("data:"):
+                            img_url = src
 
-                    loc_el = item.select_one(".property-location, .property-info-address")
-                    endereco = loc_el.get_text(strip=True) if loc_el else ""
+                    tags_el = info.select(".property-features-tag span")
+                    tags_text = " ".join(t.get_text(strip=True) for t in tags_el)
 
-                    desc_el = item.select_one(".property-description")
-                    descricao = desc_el.get_text(strip=True) if desc_el else ""
-
-                    tipologia = detect_tipologia(f"{title} {area_text}")
+                    tipologia = detect_tipologia(f"{title} {features_text}")
                     mobiliado = any(
-                        kw in descricao.lower()
+                        kw in f"{features_text} {tags_text}".lower()
                         for kw in ["mobilado", "mobiliado", "equipado"]
                     )
+
+                    freguesia = ""
+                    if "," in endereco:
+                        parts = [p.strip() for p in endereco.split(",")]
+                        if len(parts) >= 2:
+                            freguesia = parts[0]
 
                     address_for_geo = endereco or f"{title}, {cidade}"
                     coords = geocode_address(address_for_geo)
@@ -146,10 +165,10 @@ def scrape_cidade(cidade: str) -> list[dict]:
 
                     resultados.append({
                         "titulo": title[:500],
-                        "link": href,
+                        "link": link,
                         "endereco": endereco[:500],
                         "cidade": cidade,
-                        "freguesia": "",
+                        "freguesia": freguesia[:200],
                         "tipologia": tipologia,
                         "preco": preco,
                         "area_m2": area,
@@ -158,13 +177,14 @@ def scrape_cidade(cidade: str) -> list[dict]:
                         "lon": lon,
                         "mobiliado": mobiliado,
                         "fonte": "sapo",
-                        "descricao": descricao[:2000],
+                        "descricao": "",
                     })
+                    parsed_count += 1
                 except Exception as e:
                     print(f"  [sapo] Erro ao parsear item: {e}")
                     continue
 
-            print(f"  [sapo] {cidade} pagina {pagina}: {len(items)} anuncios")
+            print(f"  [sapo] {cidade} pagina {pagina}: {parsed_count} arrendamentos de {len(items)} anuncios")
             time.sleep(3)
 
         except Exception as e:

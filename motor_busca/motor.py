@@ -131,8 +131,11 @@ def main():
 
     client = get_client()
 
-    count = client.table("imoveis").select("id", count="exact", head=True).execute()
-    print(f"Imoveis no banco: {count.count}")
+    try:
+        count = client.table("imoveis").select("id", count="exact", head=True).execute()
+        print(f"Imoveis no banco: {count.count}")
+    except Exception:
+        print("Imoveis no banco: (contagem indisponivel)")
     print(f"Intervalo entre ciclos: {INTERVALO_ENTRE_CICLOS_MIN} min")
     print("Motor iniciado. Ctrl+C para parar.\n")
 

@@ -91,8 +91,7 @@ def scrape_cidade(cidade: str) -> list[dict]:
         try:
             resp = client.get(url)
             if resp.status_code == 403:
-                print(f"  [idealista] 403 em {cidade} pagina {pagina} - pausando")
-                time.sleep(60)
+                print(f"  [idealista] 403 em {cidade} pagina {pagina} - bloqueado")
                 break
             if resp.status_code != 200:
                 print(f"  [idealista] Status {resp.status_code} em {cidade} pagina {pagina}")

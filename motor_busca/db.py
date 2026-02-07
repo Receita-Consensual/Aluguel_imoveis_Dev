@@ -1,14 +1,16 @@
+import json
 from supabase import create_client
 from config import SUPABASE_URL, SUPABASE_SERVICE_KEY
 
 
 def get_client():
-    if not SUPABASE_SERVICE_KEY:
+    key = SUPABASE_SERVICE_KEY
+    if not key:
         raise ValueError(
             "SUPABASE_SERVICE_KEY nao definida. "
             "Exporta a variavel: export SUPABASE_SERVICE_KEY='sua_chave_aqui'"
         )
-    return create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    return create_client(SUPABASE_URL, key)
 
 
 def upsert_imoveis(client, imoveis: list[dict]) -> int:
@@ -18,32 +20,24 @@ def upsert_imoveis(client, imoveis: list[dict]) -> int:
     inserted = 0
     for imovel in imoveis:
         try:
-            existing = (
-                client.table("imoveis")
-                .select("id")
-                .eq("link", imovel["link"])
-                .maybe_single()
-                .execute()
-            )
-
-            if existing.data:
-                client.table("imoveis").update({
-                    "preco": imovel["preco"],
-                    "imagem_url": imovel["imagem_url"],
-                    "descricao": imovel["descricao"],
-                    "mobiliado": imovel["mobiliado"],
-                }).eq("link", imovel["link"]).execute()
-            else:
-                location_value = None
-                if imovel["lat"] != 0 and imovel["lon"] != 0:
-                    location_value = f"POINT({imovel['lon']} {imovel['lat']})"
-
-                client.table("imoveis").insert({
-                    **imovel,
-                    "location": location_value,
-                }).execute()
+            result = client.rpc("upsert_imovel", {
+                "p_titulo": imovel.get("titulo", ""),
+                "p_link": imovel["link"],
+                "p_endereco": imovel.get("endereco", ""),
+                "p_cidade": imovel.get("cidade", ""),
+                "p_freguesia": imovel.get("freguesia", ""),
+                "p_tipologia": imovel.get("tipologia", ""),
+                "p_preco": imovel.get("preco", 0),
+                "p_area_m2": imovel.get("area_m2", 0),
+                "p_imagem_url": imovel.get("imagem_url", ""),
+                "p_lat": imovel.get("lat", 0),
+                "p_lon": imovel.get("lon", 0),
+                "p_mobiliado": imovel.get("mobiliado", False),
+                "p_fonte": imovel.get("fonte", ""),
+                "p_descricao": imovel.get("descricao", ""),
+            }).execute()
+            if result.data == "inserted":
                 inserted += 1
-
         except Exception as e:
             if "duplicate" in str(e).lower() or "23505" in str(e):
                 continue
@@ -53,24 +47,19 @@ def upsert_imoveis(client, imoveis: list[dict]) -> int:
 
 
 def get_demandas_pendentes(client) -> list[dict]:
-    result = (
-        client.table("demandas")
-        .select("*")
-        .eq("status", "pendente")
-        .order("criado_em", desc=False)
-        .limit(10)
-        .execute()
-    )
+    result = client.rpc("get_demandas_pendentes_rpc").execute()
     return result.data or []
 
 
 def marcar_demanda_processando(client, demanda_id: str):
-    client.table("demandas").update(
-        {"status": "processando"}
-    ).eq("id", demanda_id).execute()
+    client.rpc("atualizar_demanda_status", {
+        "p_id": demanda_id,
+        "p_status": "processando",
+    }).execute()
 
 
 def marcar_demanda_concluida(client, demanda_id: str):
-    client.table("demandas").update(
-        {"status": "concluido"}
-    ).eq("id", demanda_id).execute()
+    client.rpc("atualizar_demanda_status", {
+        "p_id": demanda_id,
+        "p_status": "concluido",
+    }).execute()
