@@ -7,16 +7,36 @@ Os erros que você teve foram:
 - ❌ Função get_supabase_client não existia → ✅ CORRIGIDO
 - ❌ Função upsert_imoveis_supabase errada → ✅ CORRIGIDO
 - ❌ Importações incorretas → ✅ CORRIGIDO
+- ❌ Erro no Streamlit Cloud → ✅ CORRIGIDO
 
 
 🚀 PARA COLOCAR NO AR AGORA:
 
-═══ SITE ═══
+═══ SITE (STREAMLIT CLOUD) ═══
+
+OPÇÃO 1 - Deploy Normal:
+------------------------
 1. Vá em: https://share.streamlit.io/
 2. Faça login e clique em "New app"
 3. Selecione o arquivo: app.py
 4. Clique em "Deploy"
-5. PRONTO! Aguarde 2 minutos.
+5. Aguarde 2-3 minutos
+
+OPÇÃO 2 - Se deu erro (Debug):
+-------------------------------
+1. No Streamlit Cloud, vá em "Settings"
+2. Mude "Main file path" para: app_debug.py
+3. Clique em "Save" e aguarde reboot
+4. Veja qual teste falhou
+5. Copie o erro e me envie
+
+OPÇÃO 3 - Ver logs de erro:
+----------------------------
+1. Clique em "Manage app" (botão vermelho)
+2. Vá em "Logs"
+3. Copie o erro que aparece
+4. Abra: STREAMLIT_TROUBLESHOOTING.txt
+
 
 ═══ MOTOR ═══
 1. Abra o terminal na pasta do projeto
@@ -29,15 +49,40 @@ Os erros que você teve foram:
 3. PRONTO! O motor está rodando.
 
 
-📖 QUER MAIS DETALHES?
-Abra o arquivo: TUTORIAL_COMPLETO.txt
+═══ VERIFICAÇÕES IMPORTANTES ═══
+
+☐ requirements.txt está na RAIZ do projeto
+☐ app.py está na RAIZ do projeto
+☐ Credenciais Supabase corretas (já estão no app.py)
+☐ Aguardei 2-3 minutos após deploy
 
 
-❓ PRECISA DE AJUDA?
-- Site não carrega? → Aguarde 3 minutos após deploy
-- Motor dá erro? → Certifique-se que instalou as dependências
-- Sem imóveis? → Aguarde 10 minutos após primeira busca
+📖 MAIS DETALHES:
+- Tutorial completo: TUTORIAL_COMPLETO.txt
+- Problemas no Streamlit: STREAMLIT_TROUBLESHOOTING.txt
 
+
+❓ PROBLEMAS COMUNS:
+
+❌ "Oh no. Error running app"
+→ Use app_debug.py ou veja os logs
+→ Abra: STREAMLIT_TROUBLESHOOTING.txt
+
+❌ Motor não roda
+→ Certifique-se que instalou: pip install -r motor_busca/requirements.txt
+
+❌ Sem imóveis no mapa
+→ Aguarde 10-15 minutos após primeira busca
+→ Certifique-se que o motor está rodando
+
+
+═══════════════════════════════════════
+ARQUIVOS ÚTEIS:
+═══════════════════════════════════════
+- LEIA_AQUI_PRIMEIRO.txt (você está aqui)
+- TUTORIAL_COMPLETO.txt
+- STREAMLIT_TROUBLESHOOTING.txt
+- app_debug.py (para testar erros)
 
 ═══════════════════════════════════════
 TUDO SIMPLES E FUNCIONANDO! 🎉

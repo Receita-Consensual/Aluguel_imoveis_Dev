@@ -1,0 +1,114 @@
+═══════════════════════════════════════════════════════════════
+🔧 SOLUÇÃO DE PROBLEMAS - STREAMLIT CLOUD
+═══════════════════════════════════════════════════════════════
+
+❌ ERRO: "Oh no. Error running app"
+
+═══ PASSO 1: Ver os logs ═══
+
+1. No Streamlit Cloud, clique em "Manage app" (botão vermelho)
+2. Vá em "Logs" na barra lateral
+3. Copie o erro exato que aparece
+
+═══ PASSO 2: Testar com app de debug ═══
+
+1. No Streamlit Cloud, vá em "Settings"
+2. Em "Main file path" mude de "app.py" para "app_debug.py"
+3. Clique em "Save"
+4. Aguarde o reboot
+5. Veja quais testes falharam
+
+═══ PASSO 3: Soluções comuns ═══
+
+ERRO: "ModuleNotFoundError: No module named 'supabase'"
+→ Solução: Verifique se o requirements.txt está na RAIZ do projeto
+
+ERRO: "AttributeError: module 'supabase' has no attribute 'create_client'"
+→ Solução: Atualize o requirements.txt:
+   supabase>=2.3.0
+
+ERRO: "streamlit_folium not found"
+→ Solução: Adicione ao requirements.txt:
+   streamlit-folium>=0.16.0
+
+ERRO: Conexão com Supabase falha
+→ Solução: Verifique se as credenciais estão corretas no app.py
+
+═══ PASSO 4: Verificar estrutura de arquivos ═══
+
+Estrutura correta no GitHub/Streamlit:
+```
+seu-repo/
+├── app.py                    ← PRINCIPAL
+├── app_debug.py              ← Para testar
+├── requirements.txt          ← NA RAIZ!
+├── .streamlit/
+│   └── config.toml
+└── motor_busca/              ← Não afeta o Streamlit
+    └── ...
+```
+
+═══ PASSO 5: Requirements.txt correto ═══
+
+Conteúdo do requirements.txt (COPIE ISSO):
+
+streamlit>=1.32.0
+supabase>=2.0.0
+pandas>=2.0.0
+folium>=0.15.0
+streamlit-folium>=0.16.0
+requests>=2.31.0
+numpy>=1.24.0
+
+
+═══ PASSO 6: Se nada funcionar ═══
+
+1. Delete o app no Streamlit Cloud
+2. Crie um novo app
+3. Selecione o repositório
+4. Em "Main file path" coloque: app_debug.py
+5. Clique em "Deploy"
+6. Veja os logs de erro
+7. Depois mude para app.py
+
+═══ PASSO 7: Teste localmente primeiro ═══
+
+Antes de fazer deploy, teste local:
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Se funcionar local mas não no Streamlit Cloud:
+→ Problema é na configuração do Streamlit Cloud
+→ Verifique se o repo tem todos os arquivos
+
+═══ ERROS ESPECÍFICOS ═══
+
+❌ "This app has encountered an error. The original error message..."
+→ Erro no código Python
+→ Veja os logs completos no Streamlit Cloud
+
+❌ "We couldn't reach your app"
+→ Aguarde 2-3 minutos
+→ Recarregue a página
+→ Se persistir, rebuild o app
+
+❌ Mapa não aparece
+→ Problema com streamlit-folium
+→ Verifique versão no requirements.txt
+→ Use: streamlit-folium>=0.16.0
+
+═══ CHECKLIST FINAL ═══
+
+☐ requirements.txt está na RAIZ do projeto
+☐ app.py está na RAIZ do projeto
+☐ Todas as dependências estão no requirements.txt
+☐ Credenciais Supabase estão corretas
+☐ Testei localmente com: streamlit run app.py
+☐ Logs do Streamlit Cloud foram verificados
+
+═══════════════════════════════════════════════════════════════
+✅ AINDA TEM DÚVIDAS? Use o app_debug.py para identificar o problema!
+═══════════════════════════════════════════════════════════════

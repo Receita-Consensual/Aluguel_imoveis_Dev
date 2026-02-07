@@ -1,11 +1,15 @@
 import streamlit as st
-from supabase import create_client
 import pandas as pd
 import folium
 from folium.plugins import MarkerCluster, Fullscreen, LocateControl
 from streamlit_folium import st_folium
 import requests
 import numpy as np
+
+try:
+    from supabase import create_client, Client
+except ImportError:
+    from supabase import create_client
 
 st.set_page_config(
     page_title="Lugar | Imóveis no Mapa 🇵🇹",
@@ -169,20 +173,30 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 @st.cache_resource
 def init_connection():
-    return create_client(SUPABASE_URL, SUPABASE_KEY)
+    try:
+        return create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception as e:
+        st.error(f"Erro ao conectar ao Supabase: {str(e)}")
+        return None
 
 supabase = init_connection()
+
+if not supabase:
+    st.stop()
 
 @st.cache_data(ttl=30)
 def carregar_dados():
     try:
         res = supabase.table("imoveis").select("*").neq("lat", 0).limit(2000).execute()
-        df = pd.DataFrame(res.data)
-        if not df.empty:
-            df['lat'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
-            df['lon'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
-        return df
-    except:
+        if res and res.data:
+            df = pd.DataFrame(res.data)
+            if not df.empty and 'lat' in df.columns and 'lon' in df.columns:
+                df['lat'] = df['lat'].astype(float) + np.random.uniform(-0.0005, 0.0005, size=len(df))
+                df['lon'] = df['lon'].astype(float) + np.random.uniform(-0.0005, 0.0005, size=len(df))
+            return df
+        return pd.DataFrame()
+    except Exception as e:
+        st.error(f"Erro ao carregar dados: {str(e)}")
         return pd.DataFrame()
 
 # HERO SECTION
