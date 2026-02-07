@@ -1,164 +1,106 @@
 import streamlit as st
-from supabase import create_client
 import pandas as pd
-import folium
-from folium.plugins import MarkerCluster, Fullscreen, LocateControl
-from streamlit_folium import st_folium
 import requests
-import numpy as np
+from motor_busca.db import get_supabase_client
 
-# --- 1. CONFIGURAÇÃO DE SEO E PÁGINA ---
-# Substitua pelo link que você copiou do Imgur ou GitHub
-URL_DA_FOTO = "LINK_DA_FOTO_AQUI" 
+# --- CONFIGURAÇÃO DA PÁGINA ---
+st.set_page_config(page_title="Receita Consensual | Dashboard", layout="wide")
 
-st.set_page_config(
-    page_title="Lugar | Imóveis no Mapa 🇵🇹",
-    page_icon="🏠",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-)
-
-# Meta Tags para WhatsApp, Facebook e TikTok
-st.markdown(
-    f"""
-    <head>
-        <meta property="og:title" content="Lugar | Encontre sua casa no mapa 🤖">
-        <meta property="og:description" content="O robô inteligente que varre a internet para encontrar seu próximo lar em Portugal e no Brasil.">
-        <meta property="og:image" content="{URL_DA_FOTO}"> 
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:url" content="https://aluguelimoveis-queo6rsnzidypueducznxq.streamlit.app/">
-        <meta property="og:type" content="website">
-    </head>
-    """,
-    unsafe_allow_html=True
-)
-
-# --- 2. CSS DE ALTA VISIBILIDADE (CORRIGIDO PARA MOBILE) ---
+# --- ESTILIZAÇÃO CSS (Azul Claro e Cinza Slate) ---
 st.markdown("""
     <style>
-    [data-testid="stHeader"], [data-testid="stToolbar"], .stDeployButton, footer, #MainMenu {display: none !important;}
-    .block-container {padding: 1rem !important;}
-    .stApp { background-color: #ffffff !important; }
-
-    h1, h2, h3, p, span, label, [data-testid="stCaptionContainer"] {
-        color: #1a1a1a !important;
-        font-family: 'Inter', sans-serif;
+    /* Fundo e Fonte Geral */
+    .main { background-color: #F8FAFC; font-family: 'Inter', sans-serif; }
+    
+    /* Customização da Sidebar */
+    section[data-testid="stSidebar"] { background-color: #E2E8F0 !important; }
+    
+    /* Cartão de Imóvel Estilizado */
+    .property-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #CBD5E1;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
     }
-
-    .brand-text {
-        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        color: #6a11cb;
-        font-size: 2.8rem; font-weight: 800; text-align: center; display: block;
+    .property-card:hover {
+        transform: translateY(-4px);
+        border-color: #3B82F6;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
-
-    .stForm {
-        background-color: #f8f9fa !important;
-        border: 1px solid #e0e0e0 !important;
-        padding: 20px !important;
-        border-radius: 15px !important;
-    }
-
-    .stTextInput input {
-        color: #1a1a1a !important;
-        background-color: #ffffff !important;
+    .price { color: #1D4ED8; font-size: 22px; font-weight: 800; margin-bottom: 5px; }
+    .details { color: #64748B; font-size: 14px; margin-bottom: 15px; }
+    .btn-link {
+        display: inline-block;
+        background-color: #1D4ED8;
+        color: white !important;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        text-align: center;
     }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# --- 3. CONEXÕES (SEGURAS) ---
-import os
-
-GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else os.getenv("GOOGLE_GEOCODING_KEY", "")
-SUPABASE_URL = st.secrets.get("SUPABASE_URL") if hasattr(st, 'secrets') and 'SUPABASE_URL' in st.secrets else os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = st.secrets.get("SUPABASE_ANON_KEY") if hasattr(st, 'secrets') and 'SUPABASE_ANON_KEY' in st.secrets else os.getenv("VITE_SUPABASE_ANON_KEY", "")
-
-@st.cache_resource
-def init_connection():
-    return create_client(SUPABASE_URL, SUPABASE_KEY)
-
-supabase = init_connection()
-
-@st.cache_data(ttl=30)
-def carregar_dados():
+# --- LOGICA GOOGLE AUTOCOMPLETE (Manual) ---
+def get_google_suggestions(query, api_key):
+    if not query or len(query) < 3: return []
+    url = f"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={query}&key={api_key}&language=pt-PT"
     try:
-        res = supabase.table("imoveis").select("*").neq("lat", 0).limit(1000).execute()
-        df = pd.DataFrame(res.data)
-        if not df.empty:
-            df['lat'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
-            df['lon'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
-        return df
-    except: return pd.DataFrame()
+        response = requests.get(url).json()
+        return [p['description'] for p in response.get('predictions', [])]
+    except:
+        return []
 
-# --- 4. INTERFACE ---
-st.markdown('<span class="brand-text">Lugar</span>', unsafe_allow_html=True)
-df_total = carregar_dados()
+# --- INTERFACE ---
+with st.sidebar:
+    st.title("🏙️ Busca Avançada")
+    st.write("Configure seus filtros abaixo:")
+    
+    # Busca de Local com Google
+    api_key = "SUA_API_KEY_AQUI" # Insira sua chave do Google Maps aqui
+    
+    local_input = st.text_input("📍 Localização (Autocomplete Google)", placeholder="Ex: Aveiro, Portugal")
+    
+    # Sugestões aparecem aqui se o usuário digitar
+    if local_input and api_key != "SUA_API_KEY_AQUI":
+        sugestoes = get_google_suggestions(local_input, api_key)
+        if sugestoes:
+            local_selecionado = st.selectbox("Confirmar local:", [""] + sugestoes)
 
-if not df_total.empty:
-    st.caption(f"📍 {len(df_total)} imóveis disponíveis agora")
-else:
-    st.caption("📍 O robô está a trabalhar... tente pesquisar uma cidade!")
+    st.divider()
+    preco = st.slider("Orçamento Mensal (€)", 0, 3000, (600, 1200))
+    quartos = st.segmented_control("Quartos", ["T0", "T1", "T2", "T3+"], default="T2")
 
-col_search, col_btn = st.columns([8, 2])
-with col_search:
-    local_input = st.text_input("Onde quer viver?", placeholder="Ex: Aveiro, Porto...", label_visibility="collapsed")
-with col_btn:
-    buscar = st.button("🔍 Buscar")
+# --- CABEÇALHO ---
+st.title("🔭 Radar de Imóveis | Receita Consensual")
+st.write(f"Exibindo resultados para: **{local_input if local_input else 'Portugal Todo'}**")
 
-# --- 5. LÓGICA DE BUSCA E LOGS ---
-map_center = [39.55, -7.85]
-zoom_start = 7
+# --- GRID DE EXIBIÇÃO ---
+# Aqui simulamos os dados que vêm do seu motor_infinito
+# imoveis_df = carregar_dados_do_supabase()
 
-if buscar and local_input:
-    try: supabase.table("logs_pesquisas").insert({"termo_buscado": local_input}).execute()
-    except: pass
+col1, col2, col3 = st.columns(3)
 
-    url = f"https://maps.googleapis.com/maps/api/geocode/json?address={local_input}&key={GOOGLE_API_KEY}"
-    r = requests.get(url).json()
-    if r['status'] == 'OK':
-        loc = r['results'][0]['geometry']['location']
-        map_center = [loc['lat'], loc['lng']]
-        zoom_start = 14
-        cidade = local_input.split(",")[0].strip()
-        supabase.table("demandas").insert({"termo": cidade, "status": "pendente"}).execute()
+# Exemplo de dados para não ficar vazio enquanto o motor trabalha
+exemplo_dados = [
+    {"titulo": "T2 Moderno com Varanda", "local": "Aveiro, Centro", "preco": 850, "link": "https://olx.pt"},
+    {"titulo": "T1 Próximo à Universidade", "local": "Glória, Aveiro", "preco": 600, "link": "https://idealista.pt"},
+    {"titulo": "Moradia Isolada T3", "local": "Ílhavo", "preco": 1100, "link": "https://custojusto.pt"}
+]
 
-# --- 6. MAPA ---
-m = folium.Map(location=map_center, zoom_start=zoom_start, tiles="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", attr="Google")
-Fullscreen().add_to(m)
-LocateControl(auto_start=False).add_to(m)
-
-if not df_total.empty:
-    cluster = MarkerCluster().add_to(m)
-    for _, row in df_total.iterrows():
-        try:
-            p = f"€ {float(row['preco']):,.0f}" if row['preco'] else "Ver"
-            html = f"<b>{p}</b><br><a href='{row['link']}' target='_blank'>Ver Detalhes</a>"
-            folium.Marker([row['lat'], row['lon']], popup=html, icon=folium.Icon(color="purple", icon="home")).add_to(cluster)
-        except: continue
-
-mapa_data = st_folium(m, width="100%", height=500, returned_objects=["last_object_clicked"])
-
-# --- 7. LOGS DE CLIQUES ---
-if mapa_data.get("last_object_clicked"):
-    click_lat = mapa_data["last_object_clicked"]["lat"]
-    click_lon = mapa_data["last_object_clicked"]["lng"]
-    match = df_total[(np.isclose(df_total['lat'], click_lat, atol=1e-4)) & (np.isclose(df_total['lon'], click_lon, atol=1e-4))]
-    if not match.empty:
-        try:
-            supabase.table("logs_cliques").insert({"imovel_id": int(match.iloc[0]['id']), "titulo_imovel": match.iloc[0]['titulo']}).execute()
-        except: pass
-
-# --- 8. CUPOM DE FUNDADOR ---
-st.write("---")
-c1, c2 = st.columns(2)
-with c1:
-    st.markdown("### 🎟️ Cupom de Fundador (20% OFF)")
-    st.write("Garanta o seu desconto vitalício para quando o Lugar for lançado oficialmente.")
-with c2:
-    with st.form("vip_final"):
-        email = st.text_input("Seu E-mail")
-        if st.form_submit_button("Garantir Desconto") and email:
-            supabase.table("alertas_clientes").insert({"user_id": email, "termo_busca": "FOUNDER", "ativo": True}).execute()
-            st.balloons()
-            st.success("Registado com sucesso!")
+for i, imovel in enumerate(exemplo_dados):
+    target_col = [col1, col2, col3][i % 3]
+    with target_col:
+        st.markdown(f"""
+            <div class="property-card">
+                <div class="price">€ {imovel['preco']}</div>
+                <div style="font-weight: 700; font-size: 18px; margin-bottom: 5px;">{imovel['titulo']}</div>
+                <div class="location-tag">📍 {imovel['local']}</div>
+                <div class="details">Disponível agora • Verificado pelo Motor</div>
+                <a href="{imovel['link']}" class="btn-link" target="_blank">Ver Anúncio</a>
+            </div>
+        """, unsafe_allow_html=True)
