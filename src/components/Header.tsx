@@ -1,4 +1,4 @@
-import { MapPin, Crown } from 'lucide-react';
+import { Crown } from 'lucide-react';
 
 interface HeaderProps {
   onFounderClick: () => void;
@@ -9,9 +9,11 @@ export default function Header({ onFounderClick }: HeaderProps) {
     <header className="fixed top-0 left-0 right-0 z-[1000] bg-gradient-to-r from-white via-cyan-50/30 to-blue-50/30 backdrop-blur-md border-b border-cyan-200/50 h-14 shadow-sm">
       <div className="h-full px-4 flex items-center justify-between max-w-screen-2xl mx-auto">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 via-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-200">
-            <MapPin className="w-5 h-5 text-white" strokeWidth={2.5} />
-          </div>
+          <img
+            src="/gemini_generated_image_su6quisu6quisu6q.png"
+            alt="Lugar Portugal Logo"
+            className="w-10 h-10 object-contain drop-shadow-md"
+          />
           <div className="flex items-baseline gap-1.5">
             <span className="text-lg font-bold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent tracking-tight">Lugar</span>
             <span className="text-[11px] text-blue-600 font-semibold tracking-wide uppercase">Portugal</span>
