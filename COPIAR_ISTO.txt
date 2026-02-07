@@ -1,39 +1,105 @@
 ══════════════════════════════════════════════════════════
-COPIE E COLE ESTES COMANDOS NO SERVIDOR (linha por linha)
+COPIE TODO ESTE BLOCO E COLE NO SERVIDOR
 ══════════════════════════════════════════════════════════
 
-cat > SETUP_UNICO.sh << 'SCRIPTEND'
-#!/bin/bash
-echo "=========================================="
-echo "INSTALAÇÃO COMPLETA - MOTOR DE BUSCA"
-echo "=========================================="
-echo ""
-source venv/bin/activate
-echo "1. Criando arquivo .env..."
-cat > .env << 'ENVFILE'
-VITE_SUPABASE_URL=https://zprocqmlefzjrepxtxko.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpwcm9jcW1sZWZ6anJlcHh0eGtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg5MDQ2MzksImV4cCI6MjA1NDQ4MDYzOX0.d8-tZf69tPDxYpQOIrJdX6_UG3v6AjEJ-o0ujO9Xv1U
-VITE_GOOGLE_MAPS_API_KEY=AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4
-SUPABASE_URL=https://zprocqmlefzjrepxtxko.supabase.co
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpwcm9jcW1sZWZ6anJlcHh0eGtvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczODkwNDYzOSwiZXhwIjoyMDU0NDgwNjM5fQ.lkauygqUoMuZUsWd-S3H-qb4XGKWnOdz9i5lYHO9sZs
-GOOGLE_GEOCODING_KEY=AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4
-ENVFILE
-echo "✓ Arquivo .env criado"
-echo ""
-echo "2. Instalando pacotes Python..."
-pip install --quiet supabase selenium beautifulsoup4 requests lxml python-dotenv
-echo "✓ Pacotes instalados"
-echo ""
-echo "3. Testando..."
-python3 -c "import supabase; print('✓ supabase')"
-python3 -c "from selenium import webdriver; print('✓ selenium')"
-python3 -c "from bs4 import BeautifulSoup; print('✓ beautifulsoup4')"
-echo ""
-echo "✓ INSTALAÇÃO CONCLUÍDA!"
-echo ""
-echo "Execute agora:"
-echo "  python3 teste_conexao.py"
-SCRIPTEND
+cat > teste_conexao.py << 'EOF'
+#!/usr/bin/env python3
+import sys
+from pathlib import Path
 
-chmod +x SETUP_UNICO.sh
-bash SETUP_UNICO.sh
+sys.path.insert(0, str(Path(__file__).parent / "motor_busca"))
+
+print("="*60)
+print("  TESTE DE CONEXÃO - MOTOR DE BUSCA")
+print("="*60)
+print()
+
+print("1. Testando imports...")
+try:
+    from supabase import create_client
+    print("   ✓ supabase")
+except Exception as e:
+    print(f"   ✗ supabase: {e}")
+    sys.exit(1)
+
+try:
+    from selenium import webdriver
+    print("   ✓ selenium")
+except Exception as e:
+    print(f"   ✗ selenium: {e}")
+    sys.exit(1)
+
+try:
+    from bs4 import BeautifulSoup
+    print("   ✓ beautifulsoup4")
+except Exception as e:
+    print(f"   ✗ beautifulsoup4: {e}")
+    sys.exit(1)
+
+try:
+    import requests
+    print("   ✓ requests")
+except Exception as e:
+    print(f"   ✗ requests: {e}")
+    sys.exit(1)
+
+print()
+print("2. Testando configurações...")
+try:
+    from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY
+
+    if not SUPABASE_URL:
+        print("   ✗ SUPABASE_URL não configurada")
+        sys.exit(1)
+
+    if not SUPABASE_SERVICE_KEY:
+        print("   ✗ SUPABASE_SERVICE_KEY não configurada")
+        sys.exit(1)
+
+    print(f"   ✓ SUPABASE_URL: {SUPABASE_URL}")
+    print(f"   ✓ SUPABASE_SERVICE_KEY: {SUPABASE_SERVICE_KEY[:20]}...")
+
+except Exception as e:
+    print(f"   ✗ Erro ao carregar config: {e}")
+    sys.exit(1)
+
+print()
+print("3. Testando conexão com Supabase...")
+try:
+    from motor_busca.db import get_supabase_client
+
+    supabase = get_supabase_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    response = supabase.table('imoveis').select('id').limit(1).execute()
+
+    print("   ✓ Conexão com Supabase estabelecida")
+    print(f"   ✓ Query na tabela 'imoveis' funcionou")
+
+except Exception as e:
+    print(f"   ✗ Erro ao conectar: {e}")
+    sys.exit(1)
+
+print()
+print("4. Verificando tabelas...")
+try:
+    response = supabase.table('demandas').select('count', count='exact').execute()
+    print(f"   ✓ Tabela 'demandas' acessível")
+
+    response = supabase.table('imoveis').select('count', count='exact').execute()
+    print(f"   ✓ Tabela 'imoveis' acessível")
+
+except Exception as e:
+    print(f"   ✗ Erro ao verificar tabelas: {e}")
+    sys.exit(1)
+
+print()
+print("="*60)
+print("  ✓ TUDO OK! Sistema pronto para usar")
+print("="*60)
+print()
+print("Execute agora:")
+print("  python3 motor_turbo.py")
+print()
+EOF
+
+chmod +x teste_conexao.py
+python3 teste_conexao.py
