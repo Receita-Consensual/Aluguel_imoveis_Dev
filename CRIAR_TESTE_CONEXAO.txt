@@ -1,0 +1,121 @@
+══════════════════════════════════════════════════════════
+COPIE E COLE ESTE COMANDO NO SERVIDOR (tudo de uma vez)
+══════════════════════════════════════════════════════════
+
+cat > teste_conexao.py << 'PYEND'
+#!/usr/bin/env python3
+"""
+Script de teste para validar conexão com Supabase
+"""
+
+import sys
+from pathlib import Path
+
+# Adicionar motor_busca ao path
+sys.path.insert(0, str(Path(__file__).parent / "motor_busca"))
+
+print("="*60)
+print("  TESTE DE CONEXÃO - MOTOR DE BUSCA")
+print("="*60)
+print()
+
+# Teste 1: Importar pacotes
+print("1. Testando imports...")
+try:
+    from supabase import create_client
+    print("   ✓ supabase")
+except Exception as e:
+    print(f"   ✗ supabase: {e}")
+    sys.exit(1)
+
+try:
+    from selenium import webdriver
+    print("   ✓ selenium")
+except Exception as e:
+    print(f"   ✗ selenium: {e}")
+    sys.exit(1)
+
+try:
+    from bs4 import BeautifulSoup
+    print("   ✓ beautifulsoup4")
+except Exception as e:
+    print(f"   ✗ beautifulsoup4: {e}")
+    sys.exit(1)
+
+try:
+    import requests
+    print("   ✓ requests")
+except Exception as e:
+    print(f"   ✗ requests: {e}")
+    sys.exit(1)
+
+print()
+
+# Teste 2: Carregar configurações
+print("2. Testando configurações...")
+try:
+    from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY
+
+    if not SUPABASE_URL:
+        print("   ✗ SUPABASE_URL não configurada")
+        sys.exit(1)
+
+    if not SUPABASE_SERVICE_KEY:
+        print("   ✗ SUPABASE_SERVICE_KEY não configurada")
+        sys.exit(1)
+
+    print(f"   ✓ SUPABASE_URL: {SUPABASE_URL}")
+    print(f"   ✓ SUPABASE_SERVICE_KEY: {SUPABASE_SERVICE_KEY[:20]}...")
+
+except Exception as e:
+    print(f"   ✗ Erro ao carregar config: {e}")
+    sys.exit(1)
+
+print()
+
+# Teste 3: Conectar ao Supabase
+print("3. Testando conexão com Supabase...")
+try:
+    from motor_busca.db import get_supabase_client
+
+    supabase = get_supabase_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+
+    # Tentar fazer uma query simples
+    response = supabase.table('imoveis').select('id').limit(1).execute()
+
+    print("   ✓ Conexão com Supabase estabelecida")
+    print(f"   ✓ Query na tabela 'imoveis' funcionou")
+
+except Exception as e:
+    print(f"   ✗ Erro ao conectar: {e}")
+    sys.exit(1)
+
+print()
+
+# Teste 4: Verificar tabelas
+print("4. Verificando tabelas...")
+try:
+    # Tentar acessar tabela demandas
+    response = supabase.table('demandas').select('count', count='exact').execute()
+    print(f"   ✓ Tabela 'demandas' acessível")
+
+    # Tentar acessar tabela imoveis
+    response = supabase.table('imoveis').select('count', count='exact').execute()
+    print(f"   ✓ Tabela 'imoveis' acessível")
+
+except Exception as e:
+    print(f"   ✗ Erro ao verificar tabelas: {e}")
+    sys.exit(1)
+
+print()
+print("="*60)
+print("  ✓ TUDO OK! Sistema pronto para usar")
+print("="*60)
+print()
+print("Execute agora:")
+print("  python3 motor_turbo.py")
+print()
+PYEND
+
+chmod +x teste_conexao.py
+python3 teste_conexao.py
