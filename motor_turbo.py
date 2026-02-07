@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent / "motor_busca"))
 
 from motor_busca.config import SUPABASE_URL, SUPABASE_SERVICE_KEY
 from motor_busca.db import get_supabase_client
-from motor_busca.geocoder import geocode_place
+from motor_busca.geocoder import geocode_address
 from motor_busca.scraper_sapo import scrape_sapo
 from motor_busca.motor import upsert_imoveis_supabase
 
@@ -57,10 +57,10 @@ def processar_demandas_pendentes():
                     for imovel in imoveis:
                         if not imovel.get('lat') or not imovel.get('lon'):
                             endereco = f"{imovel.get('endereco', '')}, {imovel.get('cidade', '')}, Portugal"
-                            coords = geocode_place(endereco)
+                            coords = geocode_address(endereco)
                             if coords:
-                                imovel['lat'] = coords['lat']
-                                imovel['lon'] = coords['lon']
+                                imovel['lat'] = coords[0]
+                                imovel['lon'] = coords[1]
 
                         if imovel.get('lat') and imovel.get('lon'):
                             from math import radians, sin, cos, sqrt, atan2
