@@ -114,7 +114,7 @@ export default function PropertyCard({ imovel, isHighlighted, onHover }: Propert
             href={imovel.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold transition-colors ml-auto shadow-sm shadow-teal-200/50"
+            className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-lg text-xs font-semibold transition-all ml-auto shadow-md shadow-cyan-200/50"
           >
             Ver An\u00FAncio
             <ExternalLink className="w-3 h-3" />

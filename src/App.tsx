@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import Filters from './components/Filters';
@@ -43,6 +43,14 @@ function App() {
     () => filterImoveis(imoveis, filters),
     [imoveis, filters, filterImoveis]
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFounder(true);
+    }, 30000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSearch = useCallback(async (lat: number, lng: number, raio: number, placeName: string) => {
     setIsSearching(true);

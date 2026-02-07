@@ -1,0 +1,91 @@
+╔════════════════════════════════════════════════════════════╗
+║        LUGAR PORTUGAL - COMANDOS PARA SERVIDOR LINUX      ║
+╚════════════════════════════════════════════════════════════╝
+
+
+🚀 INICIALIZAÇÃO SUPER RÁPIDA (1 COMANDO)
+════════════════════════════════════════════════════════════
+./start_server.sh
+
+✅ Isso vai:
+   - Criar/ativar ambiente virtual Python
+   - Instalar dependências automaticamente
+   - Iniciar motor de scraping em background
+   - Servir a aplicação na porta 8080
+
+
+📋 COMANDOS INDIVIDUAIS (SE PREFERIR CONTROLE MANUAL)
+════════════════════════════════════════════════════════════
+
+1️⃣  Criar ambiente virtual Python:
+    python3 -m venv venv
+
+2️⃣  Ativar ambiente virtual:
+    source venv/bin/activate
+
+3️⃣  Instalar dependências:
+    pip install -r motor_busca/requirements.txt
+
+4️⃣  Rodar motor em background:
+    nohup python3 motor_turbo.py > motor_turbo.log 2>&1 &
+
+5️⃣  Servir aplicação web:
+    cd dist && python3 -m http.server 8080
+
+
+🔍 MONITORAMENTO
+════════════════════════════════════════════════════════════
+
+Ver logs do motor em tempo real:
+    tail -f motor_turbo.log
+
+Ver processos Python rodando:
+    ps aux | grep python
+
+Matar o motor turbo:
+    pkill -f motor_turbo.py
+
+
+🌐 ACESSAR A APLICAÇÃO
+════════════════════════════════════════════════════════════
+
+Servidor local:
+    http://localhost:8080
+
+Servidor remoto:
+    http://SEU-IP-SERVIDOR:8080
+
+
+⚙️  CONFIGURAÇÃO NECESSÁRIA
+════════════════════════════════════════════════════════════
+
+Edite o arquivo .env com suas credenciais:
+    nano .env
+
+Variáveis obrigatórias:
+    VITE_SUPABASE_URL=...
+    VITE_SUPABASE_ANON_KEY=...
+    VITE_GOOGLE_MAPS_API_KEY=...
+    SUPABASE_SERVICE_KEY=...
+
+
+🎉 FUNCIONALIDADES ATIVAS
+════════════════════════════════════════════════════════════
+
+✓ Google Maps com estilo Silver elegante
+✓ Marcadores coloridos por tipo de imóvel
+✓ Modal de Membro Fundador (aparece após 30s)
+✓ Motor de scraping em loop infinito (5-10 min)
+✓ Atualização automática de resultados
+✓ Design vibrante e responsivo
+✓ Filtros avançados de busca
+
+
+💡 DICA FINAL
+════════════════════════════════════════════════════════════
+
+Para produção, use Nginx + Systemd:
+    Veja instruções completas em: INSTRUCOES_SERVIDOR.md
+
+
+Agora é só relaxar e deixar o sistema trabalhar! 🎯
