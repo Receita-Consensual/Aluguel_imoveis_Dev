@@ -7,7 +7,9 @@ from streamlit_folium import st_folium
 import requests
 import numpy as np
 
-# Configuração SEO
+# ===================================
+# CONFIGURAÇÃO E SEO
+# ===================================
 st.set_page_config(
     page_title="Lugar | Imóveis no Mapa 🇵🇹",
     page_icon="🏠",
@@ -15,70 +17,174 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# CSS Moderno
+# CSS Ultra Moderno - Gradiente Vibrante
 st.markdown("""
     <style>
-    [data-testid="stHeader"], [data-testid="stToolbar"], .stDeployButton, footer, #MainMenu {display: none !important;}
-    .block-container {padding: 1rem !important;}
-    .stApp {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;}
+    /* Esconder elementos do Streamlit */
+    [data-testid="stHeader"], [data-testid="stToolbar"], .stDeployButton,
+    footer, #MainMenu {display: none !important;}
 
-    h1, h2, h3, p, span, label {
-        color: #ffffff !important;
-        font-family: 'Inter', -apple-system, sans-serif;
+    /* Layout */
+    .block-container {padding: 1.5rem !important; max-width: 100% !important;}
+
+    /* Background gradiente animado */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
     }
 
-    .brand-text {
-        font-size: 3.5rem;
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Tipografia */
+    h1, h2, h3, p, span, label, div {
+        color: #ffffff !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Logo principal */
+    .hero-title {
+        font-size: 4rem;
         font-weight: 900;
         text-align: center;
         color: white;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        margin-bottom: 0.5rem;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
     }
 
-    .subtitle {
+    .hero-subtitle {
         text-align: center;
-        color: rgba(255,255,255,0.9);
-        font-size: 1.1rem;
+        color: rgba(255,255,255,0.95);
+        font-size: 1.3rem;
+        font-weight: 400;
         margin-bottom: 2rem;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
+    /* Stats Card */
+    .stats-card {
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        margin: 1.5rem auto;
+        border: 2px solid rgba(255,255,255,0.3);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        max-width: 400px;
+    }
+
+    .stats-number {
+        font-size: 3rem;
+        font-weight: 900;
+        margin: 0;
+        color: white;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .stats-label {
+        font-size: 1.1rem;
+        margin: 0;
+        opacity: 0.95;
+    }
+
+    /* Inputs modernos */
     .stTextInput input {
-        background-color: rgba(255,255,255,0.95) !important;
+        background: rgba(255,255,255,0.95) !important;
         color: #1a1a1a !important;
-        border: 2px solid rgba(255,255,255,0.3) !important;
-        border-radius: 12px !important;
-        font-size: 1.1rem !important;
-        padding: 0.8rem !important;
+        border: 3px solid rgba(255,255,255,0.4) !important;
+        border-radius: 15px !important;
+        font-size: 1.2rem !important;
+        padding: 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.3s ease !important;
     }
 
+    .stTextInput input:focus {
+        border-color: #f093fb !important;
+        box-shadow: 0 0 0 3px rgba(240,147,251,0.3) !important;
+    }
+
+    /* Botão de busca */
     .stButton button {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
         color: white !important;
         border: none !important;
-        border-radius: 12px !important;
-        font-weight: 700 !important;
-        padding: 0.8rem 2rem !important;
-        font-size: 1.1rem !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border-radius: 15px !important;
+        font-weight: 800 !important;
+        padding: 1rem 2rem !important;
+        font-size: 1.2rem !important;
+        box-shadow: 0 8px 20px rgba(245,87,108,0.4);
+        transition: all 0.3s ease !important;
+        width: 100% !important;
     }
 
-    .stats-box {
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(245,87,108,0.6);
+    }
+
+    /* Card de Fundador */
+    .founder-card {
         background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 1rem;
-        text-align: center;
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 2px solid rgba(255,255,255,0.25);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+
+    .founder-title {
+        font-size: 1.8rem;
+        font-weight: 800;
         margin-bottom: 1rem;
-        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Form */
+    .stForm {
+        background: rgba(255,255,255,0.1) !important;
+        border: 2px solid rgba(255,255,255,0.2) !important;
+        padding: 1.5rem !important;
+        border-radius: 15px !important;
+    }
+
+    /* Success message */
+    .stSuccess {
+        background-color: rgba(34, 197, 94, 0.2) !important;
+        color: white !important;
+        border-radius: 10px !important;
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        color: rgba(255,255,255,0.85);
+        padding: 2rem 0;
+        margin-top: 3rem;
+        font-size: 1rem;
+    }
+
+    /* Mapa wrapper */
+    iframe {
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Conexão Supabase
+# ===================================
+# CONEXÕES
+# ===================================
+GOOGLE_API_KEY = "AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4"
 SUPABASE_URL = "https://zprocqmlefzjrepxtxko.supabase.co"
 SUPABASE_KEY = "sb_publishable_wPBDEtqfKPrYMD6m6IJzWw_VWL9sVlM"
-GOOGLE_API_KEY = "AIzaSyCws8dm1mPhPKdu4VUk7BTBEe25qGZDrb4"
 
 @st.cache_resource
 def init_connection():
@@ -92,44 +198,69 @@ def carregar_dados():
         res = supabase.table("imoveis").select("*").neq("lat", 0).limit(2000).execute()
         df = pd.DataFrame(res.data)
         if not df.empty:
+            # Adicionar pequena variação para evitar sobreposição
             df['lat'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
             df['lon'] += np.random.uniform(-0.0005, 0.0005, size=len(df))
         return df
     except:
         return pd.DataFrame()
 
-# Interface
-st.markdown('<div class="brand-text">🏠 Lugar</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Encontre seu próximo lar em Portugal</div>', unsafe_allow_html=True)
+# ===================================
+# INTERFACE PRINCIPAL
+# ===================================
 
+# Hero Section
+st.markdown('<h1 class="hero-title">🏠 Lugar</h1>', unsafe_allow_html=True)
+st.markdown('<p class="hero-subtitle">Encontre seu próximo lar em Portugal com inteligência artificial</p>', unsafe_allow_html=True)
+
+# Carregar dados
 df_total = carregar_dados()
 
-# Stats Box
+# Stats Card
 if not df_total.empty:
     st.markdown(f'''
-        <div class="stats-box">
-            <h2 style="margin:0; font-size: 2rem;">📍 {len(df_total):,}</h2>
-            <p style="margin:0;">imóveis disponíveis</p>
+        <div class="stats-card">
+            <div class="stats-number">📍 {len(df_total):,}</div>
+            <div class="stats-label">imóveis disponíveis agora</div>
+        </div>
+    ''', unsafe_allow_html=True)
+else:
+    st.markdown('''
+        <div class="stats-card">
+            <div class="stats-number">🤖</div>
+            <div class="stats-label">O robô está trabalhando...</div>
         </div>
     ''', unsafe_allow_html=True)
 
-# Barra de Busca
-col_search, col_btn = st.columns([8, 2])
-with col_search:
-    local_input = st.text_input("", placeholder="🔍 Digite a cidade (ex: Porto, Lisboa, Aveiro...)", label_visibility="collapsed")
-with col_btn:
-    buscar = st.button("BUSCAR")
+# ===================================
+# BARRA DE BUSCA
+# ===================================
+col_search, col_btn = st.columns([7, 3])
 
-# Lógica de Busca
-map_center = [39.55, -7.85]
+with col_search:
+    local_input = st.text_input(
+        "",
+        placeholder="🔍 Digite a cidade (Ex: Porto, Lisboa, Aveiro...)",
+        label_visibility="collapsed"
+    )
+
+with col_btn:
+    buscar = st.button("BUSCAR", use_container_width=True)
+
+# ===================================
+# LÓGICA DE BUSCA
+# ===================================
+map_center = [39.55, -7.85]  # Centro de Portugal
 zoom_start = 7
 
 if buscar and local_input:
+    # Salvar log de pesquisa
     try:
         supabase.table("logs_pesquisas").insert({"termo_buscado": local_input}).execute()
     except:
         pass
 
+    # Geocodificar
     url = f"https://maps.googleapis.com/maps/api/geocode/json?address={local_input},Portugal&key={GOOGLE_API_KEY}"
     r = requests.get(url).json()
 
@@ -138,71 +269,183 @@ if buscar and local_input:
         map_center = [loc['lat'], loc['lng']]
         zoom_start = 13
 
+        # Criar demanda
         cidade = local_input.split(",")[0].strip()
         try:
-            supabase.table("demandas").insert({"termo": cidade, "status": "pendente"}).execute()
+            supabase.table("demandas").insert({
+                "termo": cidade,
+                "lat": loc['lat'],
+                "lng": loc['lng'],
+                "raio_metros": 10000,
+                "status": "pendente"
+            }).execute()
         except:
             pass
 
         st.success(f"✅ Mostrando imóveis próximos a {local_input}")
+    else:
+        st.warning("⚠️ Localização não encontrada. Tente outra cidade.")
 
-# Mapa
+# ===================================
+# MAPA
+# ===================================
 m = folium.Map(
     location=map_center,
     zoom_start=zoom_start,
     tiles="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-    attr="Google"
+    attr="Google",
+    zoom_control=True,
+    scrollWheelZoom=True,
+    dragging=True,
 )
 
-Fullscreen().add_to(m)
-LocateControl(auto_start=False, strings={"title": "Ver minha localização"}).add_to(m)
+# Plugins
+Fullscreen(position='topright').add_to(m)
+LocateControl(
+    auto_start=False,
+    strings={"title": "Ver minha localização"}
+).add_to(m)
 
+# Adicionar marcadores
 if not df_total.empty:
     cluster = MarkerCluster(
         options={
             'maxClusterRadius': 50,
-            'disableClusteringAtZoom': 15
+            'disableClusteringAtZoom': 15,
+            'spiderfyOnMaxZoom': True,
         }
     ).add_to(m)
 
     for _, row in df_total.iterrows():
         try:
-            preco = f"€ {float(row['preco']):,.0f}/mês" if row['preco'] and row['preco'] > 0 else "Consultar"
-            titulo = row.get('titulo', 'Imóvel')[:50]
-            tipologia = row.get('tipologia', '')
+            # Formatação dos dados
+            preco = f"€ {float(row['preco']):,.0f}/mês" if row.get('preco') and row['preco'] > 0 else "Consultar preço"
+            titulo = row.get('titulo', 'Imóvel')[:60]
+            tipologia = row.get('tipologia', 'Apartamento')
             area = f"{row.get('area_m2', '')}m²" if row.get('area_m2') else ''
+            cidade = row.get('cidade', '')
 
+            # HTML do popup
             popup_html = f"""
-            <div style="font-family: sans-serif; min-width: 200px;">
-                <h4 style="margin: 0 0 8px 0; color: #667eea;">{preco}</h4>
-                <p style="margin: 0 0 5px 0; font-size: 12px;"><b>{titulo}</b></p>
-                <p style="margin: 0 0 8px 0; font-size: 11px; color: #666;">{tipologia} {area}</p>
+            <div style="font-family: 'Inter', sans-serif; min-width: 220px; max-width: 280px;">
+                <h3 style="margin: 0 0 10px 0; color: #667eea; font-size: 1.3rem; font-weight: 800;">
+                    {preco}
+                </h3>
+                <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">
+                    {titulo}
+                </p>
+                <p style="margin: 0 0 5px 0; font-size: 12px; color: #666;">
+                    📍 {cidade}
+                </p>
+                <p style="margin: 0 0 12px 0; font-size: 12px; color: #666;">
+                    {tipologia} • {area}
+                </p>
                 <a href="{row['link']}" target="_blank"
-                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                          color: white; padding: 6px 12px; text-decoration: none;
-                          border-radius: 6px; font-size: 12px; font-weight: bold;">
-                    Ver Anúncio →
+                   style="display: inline-block;
+                          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                          color: white;
+                          padding: 8px 16px;
+                          text-decoration: none;
+                          border-radius: 8px;
+                          font-size: 13px;
+                          font-weight: 700;
+                          box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+                          transition: all 0.3s;">
+                    Ver Anúncio Completo →
                 </a>
             </div>
             """
 
-            cor = "purple" if "moradia" in str(tipologia).lower() else "blue"
+            # Cor do marcador baseado no tipo
+            if "moradia" in str(tipologia).lower() or "vivenda" in str(tipologia).lower():
+                cor = "purple"
+            elif "apartamento" in str(tipologia).lower():
+                cor = "blue"
+            else:
+                cor = "green"
 
             folium.Marker(
                 [row['lat'], row['lon']],
-                popup=folium.Popup(popup_html, max_width=250),
+                popup=folium.Popup(popup_html, max_width=300),
                 icon=folium.Icon(color=cor, icon="home", prefix='fa')
             ).add_to(cluster)
-        except:
+
+        except Exception as e:
             continue
 
-st_folium(m, width="100%", height=600, returned_objects=[])
+# Renderizar mapa
+mapa_data = st_folium(m, width="100%", height=600, returned_objects=["last_object_clicked"])
 
-# Footer
+# Log de cliques no mapa
+if mapa_data.get("last_object_clicked"):
+    click_lat = mapa_data["last_object_clicked"]["lat"]
+    click_lon = mapa_data["last_object_clicked"]["lng"]
+    match = df_total[
+        (np.isclose(df_total['lat'], click_lat, atol=0.001)) &
+        (np.isclose(df_total['lon'], click_lon, atol=0.001))
+    ]
+    if not match.empty:
+        try:
+            supabase.table("logs_cliques").insert({
+                "imovel_id": int(match.iloc[0]['id']),
+                "titulo_imovel": match.iloc[0]['titulo']
+            }).execute()
+        except:
+            pass
+
+# ===================================
+# SEÇÃO DE MEMBRO FUNDADOR
+# ===================================
 st.markdown("---")
+
 st.markdown("""
-    <div style="text-align: center; color: rgba(255,255,255,0.8); padding: 2rem;">
-        <p style="font-size: 1.2rem; margin-bottom: 1rem;">💜 Feito com amor para ajudar você a encontrar seu lar</p>
-        <p style="font-size: 0.9rem;">Dados atualizados automaticamente • Supabase + Python + Streamlit</p>
+    <div class="founder-card">
+        <div class="founder-title">🎟️ Seja Membro Fundador</div>
+        <p style="font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            Cadastre-se agora e garanta <strong>20% de desconto vitalício</strong>
+            quando o Lugar for lançado oficialmente. Vagas limitadas!
+        </p>
+    </div>
+""", unsafe_allow_html=True)
+
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.markdown("""
+        **Benefícios exclusivos:**
+        - ✨ 20% OFF para sempre
+        - 🔔 Alertas de novos imóveis
+        - 🎯 Busca personalizada
+        - 🚀 Acesso antecipado
+    """)
+
+with col2:
+    with st.form("form_fundador"):
+        email_fundador = st.text_input("📧 Seu melhor e-mail", placeholder="seuemail@exemplo.com")
+        submit = st.form_submit_button("GARANTIR MEU DESCONTO", use_container_width=True)
+
+        if submit and email_fundador:
+            try:
+                supabase.table("alertas_clientes").insert({
+                    "user_id": email_fundador,
+                    "termo_busca": "FOUNDER",
+                    "ativo": True
+                }).execute()
+                st.balloons()
+                st.success("🎉 Parabéns! Você é oficialmente um Membro Fundador!")
+            except:
+                st.info("Você já está cadastrado!")
+
+# ===================================
+# FOOTER
+# ===================================
+st.markdown("""
+    <div class="footer">
+        <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">
+            💜 Feito com amor para ajudar você a encontrar seu lar
+        </p>
+        <p style="font-size: 0.95rem; opacity: 0.9;">
+            Dados atualizados automaticamente • Powered by Supabase + Python + AI
+        </p>
     </div>
 """, unsafe_allow_html=True)
