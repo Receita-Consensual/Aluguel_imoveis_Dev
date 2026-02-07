@@ -168,10 +168,24 @@ st.markdown("""
 
 # CREDENCIAIS DO .env OU st.secrets
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else os.getenv("GOOGLE_GEOCODING_KEY", "")
+# Carregar .env do diretório raiz
+env_path = Path(__file__).resolve().parent / ".env"
+load_dotenv(env_path)
+
+GOOGLE_API_KEY = st.secrets.get("GOOGLE_API_KEY") if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets else (os.getenv("GOOGLE_API_KEY") or os.getenv("GOOGLE_GEOCODING_KEY", ""))
 SUPABASE_URL = st.secrets.get("SUPABASE_URL") if hasattr(st, 'secrets') and 'SUPABASE_URL' in st.secrets else os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = st.secrets.get("SUPABASE_ANON_KEY") if hasattr(st, 'secrets') and 'SUPABASE_ANON_KEY' in st.secrets else os.getenv("VITE_SUPABASE_ANON_KEY", "")
+SUPABASE_KEY = st.secrets.get("SUPABASE_ANON_KEY") if hasattr(st, 'secrets') and 'SUPABASE_ANON_KEY' in st.secrets else (os.getenv("SUPABASE_ANON_KEY") or os.getenv("VITE_SUPABASE_ANON_KEY", ""))
+
+# Debug - verificar se as variáveis foram carregadas
+if not SUPABASE_URL:
+    st.error("⚠️ SUPABASE_URL não encontrada. Verifique o arquivo .env")
+    st.stop()
+if not SUPABASE_KEY:
+    st.error("⚠️ SUPABASE_ANON_KEY não encontrada. Verifique o arquivo .env")
+    st.stop()
 
 @st.cache_resource
 def init_connection():
