@@ -117,14 +117,14 @@ export default function FounderSection({ visible, onClose }: FounderSectionProps
 
         {count > 0 && (
           <div className="flex items-center justify-center gap-1.5 mt-4">
-            <Users className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-xs text-slate-500">{count} fundadores registados</span>
+            <Users className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-xs text-slate-400 font-medium">{count} fundadores registados</span>
           </div>
         )}
 
         <button
           onClick={onClose}
-          className="w-full mt-4 text-xs text-slate-500 hover:text-slate-300 transition-colors"
+          className="w-full mt-4 text-xs text-slate-400 hover:text-white font-medium transition-colors"
         >
           Fechar
         </button>
